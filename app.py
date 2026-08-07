@@ -4,8 +4,8 @@ import requests
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="RAJ-AEGIS | Jordan Studio Edition",
-    page_icon="▪️",
+    page_title="EduShield AI",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -16,153 +16,153 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Jordan Studio Minimalist / High-End Creative Aesthetic CSS
+# 2. Clean White Theme & Professional Studio CSS
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
     .main {
-        background-color: #000000;
+        background-color: #ffffff !important;
         font-family: 'Inter', sans-serif;
-        color: #f3f4f6;
+        color: #0f172a;
     }
     
-    /* Zero-Radius Minimalist Studio Header */
-    .studio-header {
-        background-color: #0a0a0a;
-        border: 1px solid #262626;
-        padding: 48px;
-        border-radius: 0px;
-        color: #ffffff;
-        margin-bottom: 30px;
+    /* Left Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: #0d1117 !important;
+        border-right: 1px solid #21262d;
     }
-    .studio-header h1 {
-        font-family: 'Syne', sans-serif;
-        font-weight: 800;
-        font-size: 38px;
-        letter-spacing: -1px;
-        margin: 0;
-        color: #ffffff;
-    }
-    .studio-header p {
-        font-family: 'Inter', sans-serif;
-        color: #a3a3a3;
-        font-size: 14px;
-        margin-top: 10px;
-        letter-spacing: 0.5px;
+    [data-testid="stSidebar"] * {
+        color: #ffffff !important;
     }
 
-    /* Landing Page Hero Styling */
+    /* Studio Header */
+    .studio-header {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 24px 32px;
+        margin: -6rem -6rem 2rem -6rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .studio-header h1 {
+        font-weight: 800;
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        margin: 0;
+        color: #0f172a;
+    }
+    .studio-header p {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    /* Hero Landing Styling */
     .hero-container {
-        padding: 80px 20px;
+        padding: 40px 20px;
         text-align: center;
         max-width: 900px;
         margin: 0 auto;
     }
     .hero-title {
-        font-family: 'Syne', sans-serif;
-        font-size: 56px;
+        font-size: 48px;
         font-weight: 800;
-        letter-spacing: -2px;
-        color: #ffffff;
-        margin-bottom: 20px;
+        letter-spacing: -1.5px;
+        color: #0f172a;
+        margin-bottom: 15px;
         line-height: 1.1;
     }
     .hero-subtitle {
-        font-family: 'Inter', sans-serif;
-        font-size: 18px;
-        color: #a3a3a3;
-        margin-bottom: 40px;
+        font-size: 16px;
+        color: #475569;
+        margin-bottom: 30px;
         line-height: 1.6;
     }
-    .feature-box {
-        background-color: #0a0a0a;
-        border: 1px solid #262626;
-        padding: 30px;
-        text-align: left;
+
+    /* Colorful Feature Cards */
+    .card-cyan {
+        background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+        border: 1px solid #06b6d4;
+        padding: 24px;
+        border-radius: 12px;
         margin-bottom: 20px;
     }
-    .feature-box h3 {
-        font-family: 'Syne', sans-serif;
-        color: #ffffff;
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
-    .feature-box p {
-        color: #737373;
-        font-size: 14px;
-        margin: 0;
-    }
+    .card-cyan * { color: #0e7490 !important; }
 
-    /* Zero-Radius Sharp Minimalist Cards */
+    .card-purple {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        border: 1px solid #8b5cf6;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    .card-purple * { color: #6d28d9 !important; }
+
+    .card-amber {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        border: 1px solid #f59e0b;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    .card-amber * { color: #b45309 !important; }
+
+    /* Standard Dashboard Cards */
     .studio-card {
-        background-color: #0a0a0a;
-        border: 1px solid #262626;
-        padding: 28px;
-        border-radius: 0px;
-        margin-bottom: 24px;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
-    /* Sharp Monochromatic & Accent Badges */
+    /* Badges */
     .badge-critical {
-        background-color: #260000;
-        color: #ff5252;
-        border: 1px solid #ff5252;
-        padding: 6px 14px;
-        font-family: 'Syne', sans-serif;
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        padding: 4px 12px;
         font-weight: 700;
         font-size: 11px;
-        letter-spacing: 1px;
         text-transform: uppercase;
+        border-radius: 20px;
     }
     .badge-warning {
-        background-color: #261c00;
-        color: #ffb100;
-        border: 1px solid #ffb100;
-        padding: 6px 14px;
-        font-family: 'Syne', sans-serif;
+        background-color: #fef3c7;
+        color: #b45309;
+        border: 1px solid #fde68a;
+        padding: 4px 12px;
         font-weight: 700;
         font-size: 11px;
-        letter-spacing: 1px;
         text-transform: uppercase;
+        border-radius: 20px;
     }
     .badge-stable {
-        background-color: #022614;
-        color: #00e676;
-        border: 1px solid #00e676;
-        padding: 6px 14px;
-        font-family: 'Syne', sans-serif;
+        background-color: #d1fae5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        padding: 4px 12px;
         font-weight: 700;
         font-size: 11px;
-        letter-spacing: 1px;
         text-transform: uppercase;
+        border-radius: 20px;
     }
 
-    /* Sharp Studio Buttons */
+    /* Primary Action Buttons */
     .stButton>button {
-        background-color: #ffffff;
-        color: #000000;
-        border-radius: 0px;
-        font-family: 'Syne', sans-serif;
-        font-weight: 700;
-        font-size: 13px;
-        letter-spacing: 0.5px;
-        padding: 0.8rem 2rem;
-        border: 1px solid #ffffff;
+        background-color: #2563eb;
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.6rem 1.4rem;
+        border: none;
         transition: all 0.2s ease;
     }
     .stButton>button:hover {
-        background-color: #000000;
-        color: #ffffff;
-        border: 1px solid #ffffff;
-    }
-
-    /* Input Fields Override */
-    .stTextInput>div>div>input, .stSelectbox>div>div>div {
-        background-color: #050505 !important;
-        color: #ffffff !important;
-        border: 1px solid #262626 !important;
-        border-radius: 0px !important;
+        background-color: #1d4ed8;
     }
     
     #MainMenu {visibility: visible;}
@@ -174,13 +174,20 @@ st.markdown("""
 # STATE 1: LANDING PAGE (ABOUT & INTRO)
 # =========================================================================
 if st.session_state.app_state == 'landing':
+    with st.sidebar:
+        st.markdown("### **EduShield AI**")
+        st.markdown("---")
+        st.markdown("📌 **Introduction**")
+        st.markdown("📖 **Overview**")
+        st.markdown("⚙️ **System Architecture**")
+
     st.markdown("""
         <div class="hero-container">
-            <div style="font-family: 'Syne', sans-serif; font-size: 12px; letter-spacing: 3px; color: #a3a3a3; margin-bottom: 15px; text-transform: uppercase;">
-                Smart India Hackathon Initiative // SIH25102
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #4f46e5; text-transform: uppercase; margin-bottom: 10px;">
+                Government of Rajasthan | Smart India Hackathon Initiative // SIH25102
             </div>
             <div class="hero-title">
-                RAJ-AEGIS <span style="color: #525252;">// STUDIO</span>
+                EduShield AI <span style="color: #64748b;">// STUDIO</span>
             </div>
             <div class="hero-subtitle">
                 An advanced institutional early warning and predictive machine learning platform designed to proactively track student retention, compute vulnerability indexes, and coordinate administrative counseling across the State of Rajasthan.
@@ -191,32 +198,31 @@ if st.session_state.app_state == 'landing':
     col_h1, col_h2, col_h3 = st.columns(3, gap="large")
     with col_h1:
         st.markdown("""
-            <div class="feature-box">
-                <h3>01 // Neural Prediction</h3>
-                <p>Real-time vector calculations assessing individual student dropout risk using behavioral and academic metrics.</p>
+            <div class="card-cyan">
+                <h3 style="margin-top:0; font-size: 18px;">01 // Neural Prediction</h3>
+                <p style="font-size: 13px; margin:0;">Real-time vector calculations assessing individual student dropout risk using behavioral metrics.</p>
             </div>
         """, unsafe_allow_html=True)
     with col_h2:
         st.markdown("""
-            <div class="feature-box">
-                <h3>02 // Regional Intel</h3>
-                <p>Macro-level aggregation across participating districts, providing deep insight into institutional attendance and fee statuses.</p>
+            <div class="card-purple">
+                <h3 style="margin-top:0; font-size: 18px;">02 // Regional Intel</h3>
+                <p style="font-size: 13px; margin:0;">Macro-level aggregation across participating districts, providing deep insight into institutional attendance.</p>
             </div>
         """, unsafe_allow_html=True)
     with col_h3:
         st.markdown("""
-            <div class="feature-box">
-                <h3>03 // Automated Hub</h3>
-                <p>Instantaneous emergency ticket dispatch and post-intervention score reassessment for school counselors.</p>
+            <div class="card-amber">
+                <h3 style="margin-top:0; font-size: 18px;">03 // Automated Hub</h3>
+                <p style="font-size: 13px; margin:0;">Instantaneous emergency ticket dispatch and post-intervention score reassessment for counselors.</p>
             </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Centered CTA Button to Enter App
     col_btn1, col_btn2, col_btn3 = st.columns([2, 2, 2])
     with col_btn2:
-        if st.button("INITIALIZE SYSTEM // GET STARTED", use_container_width=True):
+        if st.button("🚀 Get Started // Enter Dashboard", use_container_width=True):
             st.session_state.app_state = 'dashboard'
             st.rerun()
 
@@ -224,32 +230,28 @@ if st.session_state.app_state == 'landing':
 # STATE 2: ACTUAL DASHBOARD FRONTEND
 # =========================================================================
 else:
-    # 3. Studio Header Component
+    # Top Header Component
     st.markdown("""
-        <div class="studio-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="studio-header">
             <div>
-                <h1>RAJ-AEGIS <span style="color: #525252; font-weight: 400; font-size: 24px;">// STUDIO EDITION</span></h1>
+                <h1>EduShield AI <span style="color: #64748b; font-weight: 400; font-size: 18px;">// STUDIO EDITION</span></h1>
                 <p>Institutional Early Warning Systems & Architectural ML Telemetry</p>
             </div>
+        </div>
     """, unsafe_allow_html=True)
     
-    if st.button("← Back to Overview"):
-        st.session_state.app_state = 'landing'
-        st.rerun()
-
-    # 4. Sidebar Command Grid
+    # Sidebar Command Grid
     with st.sidebar:
-        st.markdown("### ▪️ SYSTEM METRICS")
-        st.success("API: CONNECTED [0ms]")
+        st.markdown("### **EduShield AI**")
+        st.markdown("---")
+        if st.button("← Back to Overview", use_container_width=True):
+            st.session_state.app_state = 'landing'
+            st.rerun()
         st.markdown("---")
         st.markdown("**Architecture:** Microservice Node")
         st.markdown("**Security Standard:** TLS-AES-256")
-        st.markdown("**Layout Style:** Minimalist Mono")
-        if st.button("Return to Landing Page", use_container_width=True):
-            st.session_state.app_state = 'landing'
-            st.rerun()
 
-    # 5. Studio Navigation Tabs
+    # Studio Navigation Tabs
     tab1, tab2, tab3, tab4 = st.tabs([
         "01 // RISK PROFILER", 
         "02 // MASTER DATABASE", 
@@ -261,7 +263,7 @@ else:
     # TAB 1: AI RISK PROFILER
     # =========================================================================
     with tab1:
-        st.markdown("### Individual Student Vulnerability Assessment")
+        st.markdown("<h3>Individual Student Vulnerability Assessment</h3>", unsafe_allow_html=True)
         
         with st.form("evaluation_form"):
             col_f1, col_f2 = st.columns(2, gap="large")
@@ -349,8 +351,8 @@ else:
                             <div class="studio-card">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
-                                        <h2 style="margin:0; font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: #ffffff;">{risk_score}%</h2>
-                                        <p style="margin:4px 0 0 0; color: #a3a3a3; font-size: 13px;">Dropout Vulnerability Index</p>
+                                        <h2 style="margin:0; font-size: 38px; font-weight: 800; color: #0f172a;">{risk_score}%</h2>
+                                        <p style="margin:4px 0 0 0; color: #64748b; font-size: 13px;">Dropout Vulnerability Index</p>
                                     </div>
                                     <div>
                                         <span class="{badge_class}">{tier}</span>
@@ -385,7 +387,7 @@ else:
     # TAB 2: MASTER STUDENT DATABASE
     # =========================================================================
     with tab2:
-        st.markdown("### Master Student Repository")
+        st.markdown("<h3>Master Student Repository</h3>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("SYNC DATABASE RECORDS"):
             try:
@@ -409,7 +411,7 @@ else:
     # TAB 3: REGIONAL INTELLIGENCE
     # =========================================================================
     with tab3:
-        st.markdown("### Regional Analytics Matrix")
+        st.markdown("<h3>Regional Analytics Matrix</h3>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("GENERATE TELEMETRY REPORT"):
             try:
@@ -443,7 +445,7 @@ else:
     # TAB 4: INTERVENTION & ALERT HUB
     # =========================================================================
     with tab4:
-        st.markdown("### Emergency Intervention & Audit Hub")
+        st.markdown("<h3>Emergency Intervention & Audit Hub</h3>", unsafe_allow_html=True)
         col_a1, col_a2 = st.columns(2, gap="large")
         
         with col_a1:
