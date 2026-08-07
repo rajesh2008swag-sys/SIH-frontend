@@ -16,12 +16,18 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Styling (Ensuring high visibility text, vibrant elements, pristine white dashboard background)
+# 2. Complete Theme Styling (Forces pure white background and vibrant elements on dashboard, leaves landing page and dark sidebar intact)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
 
-    /* Left Sidebar Styling */
+    /* Force Full Page Background to Solid White in Dashboard Mode */
+    .stApp {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+    }
+
+    /* Left Sidebar Styling (Dark to match screenshot) */
     [data-testid="stSidebar"] {
         background-color: #0d1117 !important;
         border-right: 1px solid #21262d;
@@ -88,7 +94,7 @@ st.markdown("""
     .card-amber-box h3 { font-family: 'Syne', sans-serif; color: #b45309; font-size: 18px; margin-bottom: 10px; }
     .card-amber-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
 
-    /* Dashboard Vibrant White Theme & High-Contrast Text Styling */
+    /* Dashboard Vibrant White Theme Cards & High-Contrast Text */
     .studio-card {
         background-color: #ffffff;
         border: 2px solid #e2e8f0;
@@ -101,7 +107,7 @@ st.markdown("""
         color: #0f172a !important;
     }
 
-    /* Force Streamlit Buttons to be High-Contrast Vibrant Blue with White Text */
+    /* Force Streamlit Buttons to be Vibrant Blue with White Text */
     .stButton>button {
         background-color: #2563eb !important;
         color: #ffffff !important;
