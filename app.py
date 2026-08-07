@@ -14,81 +14,72 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 
 # Initialize Session State
 if 'app_state' not in st.session_state:
-    st.session_state.app_state = 'landing'
+    st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Strict Clean White Theme CSS
+# 2. Jordan Studio White Theme CSS (Matching the provided reference layout)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    /* Force Full Page Background to Solid White & Text to Dark Slate */
-    .stApp, [data-testid="stMain"], .main {
-        background-color: #ffffff !important;
-        color: #0f172a !important;
-        font-family: 'Inter', sans-serif !important;
+    .main {
+        background-color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
     }
     
-    h1, h2, h3, h4, h5, h6, p, span, label {
-        color: #0f172a !important;
-    }
-
-    /* Left Sidebar Styling (Light Mode Clean Look) */
+    /* Left Sidebar Styling */
     [data-testid="stSidebar"] {
-        background-color: #f8fafc !important;
-        border-right: 1px solid #e2e8f0;
-        padding-top: 20px;
+        background-color: #0d1117 !important;
+        border-right: 1px solid #21262d;
     }
     [data-testid="stSidebar"] * {
-        color: #0f172a !important;
+        color: #ffffff !important;
     }
 
-    /* Landing Page Cards with Soft Colors */
-    .card-cyan {
-        background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
-        border: 1px solid #06b6d4;
-        padding: 24px;
-        border-radius: 12px;
-        margin-bottom: 20px;
+    /* Top Header */
+    .studio-header {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 24px 32px;
+        margin: -6rem -6rem 2rem -6rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-    .card-cyan * { color: #0e7490 !important; }
 
-    .card-purple {
-        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-        border: 1px solid #8b5cf6;
-        padding: 24px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-    }
-    .card-purple * { color: #6d28d9 !important; }
-
-    .card-amber {
-        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-        border: 1px solid #f59e0b;
-        padding: 24px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-    }
-    .card-amber * { color: #b45309 !important; }
-
+    /* Cards */
     .studio-card {
-        background-color: #f8fafc;
+        background-color: #ffffff;
         border: 1px solid #e2e8f0;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    /* Primary Buttons */
+    /* Badges */
+    .badge-high {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+
+    /* Primary Action Buttons */
     .stButton>button {
-        background-color: #2563eb !important;
-        color: white !important;
+        background-color: #2563eb;
+        color: white;
         border-radius: 8px;
         font-weight: 600;
-        padding: 0.6rem 1.2rem;
+        padding: 0.5rem 1rem;
         border: none;
+        transition: all 0.2s;
     }
     .stButton>button:hover {
-        background-color: #1d4ed8 !important;
+        background-color: #1d4ed8;
     }
     
     #MainMenu {visibility: visible;}
@@ -97,26 +88,26 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING / INTRODUCTION PAGE
+# STATE 1: LANDING / ABOUT PAGE (Default when website link opens)
 # =========================================================================
 if st.session_state.app_state == 'landing':
+    # Sidebar navigation placeholder for landing
     with st.sidebar:
         st.markdown("### **EduShield AI**")
         st.markdown("---")
-        st.markdown("📌 **Introduction**")
-        st.markdown("📖 **Overview**")
-        st.markdown("⚙️ **System Architecture**")
+        st.markdown("📌 **Overview**")
+        st.markdown("🚀 **System Introduction**")
 
     st.markdown("""
-        <div style="max-width: 900px; margin: 30px auto; padding: 20px;">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #4f46e5; text-transform: uppercase; margin-bottom: 8px;">
-                Government of Rajasthan | Smart India Hackathon Initiative
+        <div style="max-width: 850px; margin: 40px auto; padding: 20px;">
+            <div style="font-size: 12px; font-weight: 700; letter-spacing: 2px; color: #4f46e5; text-transform: uppercase; margin-bottom: 10px;">
+                Government of Rajasthan | Smart India Hackathon
             </div>
-            <h1 style="font-size: 42px; font-weight: 800; color: #0f172a; letter-spacing: -1px; margin-bottom: 15px;">
-                EduShield AI — Institutional Early Warning & Prediction System
+            <h1 style="font-size: 44px; font-weight: 800; color: #0f172a; letter-spacing: -1px; margin-bottom: 20px;">
+                Institutional Early Warning & Dropout Prediction System
             </h1>
-            <p style="font-size: 16px; color: #475569; line-height: 1.6; margin-bottom: 30px;">
-                Welcome to the official state-level intelligence platform. EduShield AI analyzes student data vectors in real time, flags dropout risks, and automates emergency administrative interventions.
+            <p style="font-size: 17px; color: #475569; line-height: 1.6; margin-bottom: 35px;">
+                EduShield AI is an enterprise-grade intelligence platform engineered to analyze student telemetry vectors, compute real-time dropout vulnerability risks, and coordinate proactive administrative interventions across educational institutions.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -124,35 +115,35 @@ if st.session_state.app_state == 'landing':
     col1, col2, col3 = st.columns(3, gap="large")
     with col1:
         st.markdown("""
-            <div class="card-cyan">
-                <h4 style="margin-top:0;">📊 Risk Profiler</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
+            <div class="studio-card">
+                <h4>📊 Risk Profiler</h4>
+                <p style="font-size: 13px; color: #64748b;">Instant predictive evaluations using advanced machine learning models.</p>
             </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
-            <div class="card-purple">
-                <h4 style="margin-top:0;">👥 Student Repository</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Centralized database synchronization for live student records.</p>
+            <div class="studio-card">
+                <h4>👥 Student Repository</h4>
+                <p style="font-size: 13px; color: #64748b;">Centralized database synchronization for live student records.</p>
             </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
-            <div class="card-amber">
-                <h4 style="margin-top:0;">🚨 Intervention Hub</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
+            <div class="studio-card">
+                <h4>🚨 Intervention Hub</h4>
+                <p style="font-size: 13px; color: #64748b;">Automated alert dispatch and counselor ticket management.</p>
             </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     c_btn1, c_btn2, c_btn3 = st.columns([2, 2, 2])
     with c_btn2:
-        if st.button("🚀 Get Started // Enter Dashboard", use_container_width=True):
+        if st.button("🚀 Get Started // Open Dashboard", use_container_width=True):
             st.session_state.app_state = 'dashboard'
             st.rerun()
 
 # =========================================================================
-# STATE 2: ACTUAL DASHBOARD VIEW
+# STATE 2: ACTUAL DASHBOARD (Opened after clicking Get Started)
 # =========================================================================
 else:
     with st.sidebar:
@@ -172,27 +163,32 @@ else:
             label_visibility="collapsed"
         )
         
-        st.markdown("<br><br><br>", unsafe_allow_html=True)
+        st.markdown("<br><br>", unsafe_allow_html=True)
         if st.button("🚪 Logout / Overview", use_container_width=True):
             st.session_state.app_state = 'landing'
             st.rerun()
 
+    # Top Header Bar
     st.markdown("""
-        <div style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 20px 32px; margin: -6rem -6rem 2rem -6rem; display: flex; justify-content: space-between; align-items: center;">
+        <div class="studio-header">
             <div style="font-weight: 600; font-size: 15px; color: #0f172a;">Government of Rajasthan</div>
             <div style="font-size: 13px; color: #64748b; font-weight: 500;">👤 Admin Portal</div>
         </div>
     """, unsafe_allow_html=True)
 
+    # =========================================================================
+    # 1. DASHBOARD VIEW
+    # =========================================================================
     if selected_option == "🏠 Dashboard":
         st.markdown("<h2>Dashboard</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; margin-top: -10px; margin-bottom: 25px;'>Government of Rajasthan • AI-based Student Dropout Prediction System</p>", unsafe_allow_html=True)
 
+        # Metric Summary Cards
         m1, m2, m3, m4 = st.columns(4)
         with m1:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 36px; font-weight: 700; color: #0f172a;">5</h1>
+                    <h1 style="margin:0; font-size: 36px; font-weight: 700;">5</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">Students</p>
                 </div>
             """, unsafe_allow_html=True)
@@ -219,18 +215,25 @@ else:
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<h3>High Risk Students</h3>", unsafe_allow_html=True)
+        st.markdown("### High Risk Students")
+        
+        # High Risk Table Preview
         risk_data = {
             "Name": ["Rahul Sharma", "Priya Singh"],
             "Attendance": [54, 62],
             "CGPA": [5.8, 6.2],
             "Risk": ["High", "High"]
         }
-        st.dataframe(pd.DataFrame(risk_data), use_container_width=True, hide_index=True)
+        df_risk = pd.DataFrame(risk_data)
+        st.dataframe(df_risk, use_container_width=True, hide_index=True)
 
+    # =========================================================================
+    # 2. STUDENTS REPOSITORY VIEW
+    # =========================================================================
     elif selected_option == "👥 Students":
         st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b;'>Synchronized records from cloud database.</p>", unsafe_allow_html=True)
+        
         if st.button("🔄 Sync Database Records"):
             try:
                 with st.spinner("Fetching cloud records..."):
@@ -241,9 +244,14 @@ else:
                         st.dataframe(pd.DataFrame(records), use_container_width=True)
                     else:
                         st.info("No records found in repository.")
+                else:
+                    st.error("Failed to fetch records.")
             except Exception as e:
                 st.error(f"Connection error: {e}")
 
+    # =========================================================================
+    # 3. AI PREDICTION VIEW (Risk Profiler Form)
+    # =========================================================================
     elif selected_option == "⚡ AI Prediction":
         st.markdown("<h2>AI Vulnerability Prediction</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b;'>Provide student institutional telemetry to calculate risk vectors.</p>", unsafe_allow_html=True)
@@ -302,6 +310,9 @@ else:
                 except Exception as err:
                     st.error(f"Error: {err}")
 
+    # =========================================================================
+    # 4. ANALYTICS VIEW
+    # =========================================================================
     elif selected_option == "📊 Analytics":
         st.markdown("<h2>Regional Intelligence & Analytics</h2>", unsafe_allow_html=True)
         if st.button("Generate District Telemetry"):
@@ -328,6 +339,9 @@ else:
             except Exception as ex:
                 st.error(f"Error: {ex}")
 
+    # =========================================================================
+    # 5. COUNSELLING & REPORTS VIEW
+    # =========================================================================
     elif selected_option in ["💬 Counselling", "📋 Reports"]:
         st.markdown(f"<h2>{selected_option} Hub</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b;'>Manage emergency tickets, counseling sessions, and compliance reports.</p>", unsafe_allow_html=True)
