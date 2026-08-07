@@ -16,18 +16,18 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Complete Theme Styling (Forces high-contrast white text on buttons and visible form controls)
+# 2. Complete Theme Styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
 
-    /* Force Full Page Background to Solid White in Dashboard Mode */
+    /* Force Full Page Background to Solid White */
     .stApp {
         background-color: #ffffff !important;
         color: #0f172a !important;
     }
 
-    /* Left Sidebar Styling */
+    /* Left Sidebar Styling (Only active in dashboard mode) */
     [data-testid="stSidebar"] {
         background-color: #0d1117 !important;
         border-right: 1px solid #21262d;
@@ -36,27 +36,27 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* Landing Page Hero Container (Untouched) */
+    /* Landing Page Hero Container */
     .landing-hero {
         background-color: #ffffff !important;
-        padding: 40px 20px;
+        padding: 30px 20px;
         text-align: center;
         max-width: 950px;
         margin: 0 auto;
     }
     .landing-title {
         font-family: 'Syne', sans-serif;
-        font-size: 48px;
+        font-size: 44px;
         font-weight: 800;
         letter-spacing: -1.5px;
         color: #0f172a;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
     .landing-subtitle {
         font-family: 'Inter', sans-serif;
         font-size: 15px;
         color: #475569;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         line-height: 1.6;
         max-width: 800px;
         margin-left: auto;
@@ -67,32 +67,43 @@ st.markdown("""
     .card-cyan-box {
         background-color: #f0fdfa;
         border: 1px solid #2dd4bf;
-        padding: 28px;
+        padding: 24px;
         border-radius: 12px;
-        min-height: 160px;
+        min-height: 150px;
     }
-    .card-cyan-box h3 { font-family: 'Syne', sans-serif; color: #0f766e; font-size: 18px; margin-bottom: 10px; }
+    .card-cyan-box h3 { font-family: 'Syne', sans-serif; color: #0f766e; font-size: 17px; margin-bottom: 8px; }
     .card-cyan-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
 
     .card-purple-box {
         background-color: #f5f3ff;
         border: 1px solid #a78bfa;
-        padding: 28px;
+        padding: 24px;
         border-radius: 12px;
-        min-height: 160px;
+        min-height: 150px;
     }
-    .card-purple-box h3 { font-family: 'Syne', sans-serif; color: #6d28d9; font-size: 18px; margin-bottom: 10px; }
+    .card-purple-box h3 { font-family: 'Syne', sans-serif; color: #6d28d9; font-size: 17px; margin-bottom: 8px; }
     .card-purple-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
 
     .card-amber-box {
         background-color: #fffbeb;
         border: 1px solid #fcd34d;
-        padding: 28px;
+        padding: 24px;
         border-radius: 12px;
-        min-height: 160px;
+        min-height: 150px;
     }
-    .card-amber-box h3 { font-family: 'Syne', sans-serif; color: #b45309; font-size: 18px; margin-bottom: 10px; }
+    .card-amber-box h3 { font-family: 'Syne', sans-serif; color: #b45309; font-size: 17px; margin-bottom: 8px; }
     .card-amber-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
+
+    /* Team Members Grid Card */
+    .team-card {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 24px;
+        border-radius: 12px;
+        max-width: 800px;
+        margin: 25px auto;
+        text-align: left;
+    }
 
     /* Dashboard Cards */
     .studio-card {
@@ -158,18 +169,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING PAGE (Untouched)
+# STATE 1: LANDING PAGE (No left sidebar, includes Team details & Prepared By)
 # =========================================================================
 if st.session_state.app_state == 'landing':
-    with st.sidebar:
-        st.markdown("### **EduShield AI**")
-        st.markdown("---")
-        st.markdown("📌 **Introduction**")
-        st.markdown("📖 **Overview**")
-        st.markdown("⚙️ **System Architecture**")
+    # Completely hidden sidebar via empty block check or CSS hide
+    st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {display: none !important;}
+        </style>
+    """, unsafe_allow_html=True)
 
     st.markdown("""
         <div class="landing-hero">
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #4f46e5; text-transform: uppercase; margin-bottom: 8px;">
+                Government of Rajasthan | Smart India Hackathon Initiative
+            </div>
             <div class="landing-title">
                 EduShield AI <span style="color: #64748b; font-weight: 400;">// STUDIO</span>
             </div>
@@ -202,6 +216,23 @@ if st.session_state.app_state == 'landing':
             </div>
         """, unsafe_allow_html=True)
 
+    # Team Members & Institution Details Section
+    st.markdown("""
+        <div class="team-card">
+            <h3 style="margin-top:0; color: #0f172a; font-family: 'Syne', sans-serif; font-size: 18px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                Prepared by: SRM INSTITUTE OF SCIENCE AND TECHNOLOGY
+            </h3>
+            <ul style="color: #334155; font-size: 14px; line-height: 1.8; margin-bottom: 0; padding-left: 20px;">
+                <li><b>RAJESH (FRONTEND)</b> — RA2511026020377</li>
+                <li><b>FARID (BACKEND)</b> — RA2511026020353</li>
+                <li><b>JASHWANTH (FRONTEND)</b> — RA2511026020355</li>
+                <li><b>TARUNIKA (PPT)</b> — RA251102602068</li>
+                <li><b>GAUTHAM (PPT)</b> — RA2511026020341</li>
+                <li><b>VEDHANTHA (PROTOTYPE)</b> — RA2511026020366</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("<br>", unsafe_allow_html=True)
     
     col_btn1, col_btn2, col_btn3 = st.columns([2, 2, 2])
@@ -211,7 +242,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW
+# STATE 2: DASHBOARD VIEW (Restores sidebar for navigation once Get Started is clicked)
 # =========================================================================
 else:
     st.markdown("""
