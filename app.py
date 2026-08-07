@@ -16,12 +16,12 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Styling (White background and vibrant colors for dashboard, dark sidebar without EduShield AI, untouched landing page)
+# 2. Styling (Ensuring high visibility text, vibrant elements, pristine white dashboard background)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
 
-    /* Left Sidebar Styling (Dark to match screenshot) */
+    /* Left Sidebar Styling */
     [data-testid="stSidebar"] {
         background-color: #0d1117 !important;
         border-right: 1px solid #21262d;
@@ -88,12 +88,7 @@ st.markdown("""
     .card-amber-box h3 { font-family: 'Syne', sans-serif; color: #b45309; font-size: 18px; margin-bottom: 10px; }
     .card-amber-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
 
-    /* Dashboard Vibrant White Theme Styling */
-    .dashboard-body {
-        background-color: #ffffff !important;
-        color: #0f172a !important;
-    }
-    
+    /* Dashboard Vibrant White Theme & High-Contrast Text Styling */
     .studio-card {
         background-color: #ffffff;
         border: 2px solid #e2e8f0;
@@ -102,17 +97,35 @@ st.markdown("""
         margin-bottom: 24px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
-    
+    .studio-card * {
+        color: #0f172a !important;
+    }
+
+    /* Force Streamlit Buttons to be High-Contrast Vibrant Blue with White Text */
+    .stButton>button {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.2rem !important;
+        border: none !important;
+    }
+    .stButton>button:hover {
+        background-color: #1d4ed8 !important;
+        color: #ffffff !important;
+    }
+
+    /* Badges */
     .badge-critical {
-        background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;
+        background-color: #fee2e2; color: #b91c1c !important; border: 1px solid #fecaca;
         padding: 6px 14px; font-weight: 700; font-size: 11px; text-transform: uppercase; border-radius: 20px;
     }
     .badge-warning {
-        background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a;
+        background-color: #fef3c7; color: #b45309 !important; border: 1px solid #fde68a;
         padding: 6px 14px; font-weight: 700; font-size: 11px; text-transform: uppercase; border-radius: 20px;
     }
     .badge-stable {
-        background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0;
+        background-color: #d1fae5; color: #047857 !important; border: 1px solid #a7f3d0;
         padding: 6px 14px; font-weight: 700; font-size: 11px; text-transform: uppercase; border-radius: 20px;
     }
 
@@ -175,18 +188,17 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (White background, vibrant colors, "EduShield AI" text deleted from sidebar)
+# STATE 2: DASHBOARD VIEW (White Background & High-Visibility Text)
 # =========================================================================
 else:
     st.markdown("""
         <style>
         .stApp { background-color: #ffffff !important; color: #0f172a !important; }
-        h1, h2, h3, h4, h5, h6, p, label { color: #0f172a !important; }
+        h1, h2, h3, h4, h5, h6, p, label, .stTextInput label, .stSelectbox label { color: #0f172a !important; }
         </style>
     """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # EduShield AI header completely removed as requested
         st.markdown("---")
         
         selected_option = st.radio(
@@ -210,25 +222,25 @@ else:
     st.markdown("""
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 25px;">
             <div>
-                <h1 style="margin:0; font-size: 28px; font-family: 'Syne', sans-serif; color: #0f172a;">Government of Rajasthan</h1>
-                <p style="margin:4px 0 0 0; color: #64748b; font-size: 13px;">AI-based Student Dropout Prediction System</p>
+                <h1 style="margin:0; font-size: 28px; font-family: 'Syne', sans-serif; color: #0f172a !important;">Government of Rajasthan</h1>
+                <p style="margin:4px 0 0 0; color: #64748b !important; font-size: 13px;">AI-based Student Dropout Prediction System</p>
             </div>
-            <div style="color: #475569; font-weight: 600;">👤 Admin</div>
+            <div style="color: #475569 !important; font-weight: 600;">👤 Admin</div>
         </div>
     """, unsafe_allow_html=True)
 
     # =========================================================================
-    # 1. AI PREDICTION VIEW (First Page)
+    # 1. AI PREDICTION VIEW
     # =========================================================================
     if selected_option == "🤖 AI Prediction":
-        st.markdown("<h2>Individual Student Vulnerability Assessment</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a !important;'>Individual Student Vulnerability Assessment</h2>", unsafe_allow_html=True)
         
         with st.form("evaluation_form"):
             col_f1, col_f2 = st.columns(2, gap="large")
             
             with col_f1:
                 st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-                st.markdown("<h4>Administrative Context</h4>", unsafe_allow_html=True)
+                st.markdown("<h4 style='color: #0f172a !important;'>Administrative Context</h4>", unsafe_allow_html=True)
                 student_id = st.text_input("Student Unique ID / Roll Number*", placeholder="e.g., RJ-JP-2026-890")
                 school_name = st.text_input("Institution Name*", placeholder="e.g., Govt Sr Sec School, Jaipur")
                 gender = st.selectbox("Gender", options=["Male", "Female", "Other"])
@@ -237,7 +249,7 @@ else:
                 
             with col_f2:
                 st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-                st.markdown("<h4>Environmental Parameters</h4>", unsafe_allow_html=True)
+                st.markdown("<h4 style='color: #0f172a !important;'>Environmental Parameters</h4>", unsafe_allow_html=True)
                 internet_access = st.selectbox("Internet Access at Home", options=["Yes", "No"])
                 family_support = st.selectbox("Family Academic Support", options=["Yes", "No"])
                 wants_higher_ed = st.selectbox("Wants Higher Education", options=["Yes", "No"])
@@ -245,7 +257,7 @@ else:
                 st.markdown('</div>', unsafe_allow_html=True)
                 
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            st.markdown("<h4>Quantitative Behavioral Vectors</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='color: #0f172a !important;'>Quantitative Behavioral Vectors</h4>", unsafe_allow_html=True)
             col_n1, col_n2, col_n3, col_n4 = st.columns(4)
             with col_n1: school_support = st.selectbox("Extra School Support", options=["Yes", "No"])
             with col_n2: extra_paid_class = st.selectbox("Extra Paid Classes", options=["Yes", "No"])
@@ -288,8 +300,8 @@ else:
                             <div class="studio-card" style="background-color: #f8fafc;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
-                                        <h2 style="margin:0; font-size: 48px; font-weight: 800; color: #0f172a;">{risk_score}%</h2>
-                                        <p style="margin:4px 0 0 0; color: #64748b; font-size: 13px;">Dropout Vulnerability Index</p>
+                                        <h2 style="margin:0; font-size: 48px; font-weight: 800; color: #0f172a !important;">{risk_score}%</h2>
+                                        <p style="margin:4px 0 0 0; color: #64748b !important; font-size: 13px;">Dropout Vulnerability Index</p>
                                     </div>
                                     <div><span class="{badge_class}">{tier}</span></div>
                                 </div>
@@ -302,7 +314,7 @@ else:
     # 2. STUDENTS REPOSITORY VIEW
     # =========================================================================
     elif selected_option == "🎓 Students":
-        st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository</h2>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("SYNC DATABASE RECORDS"):
             try:
@@ -326,7 +338,7 @@ else:
     # 3. ANALYTICS VIEW
     # =========================================================================
     elif selected_option == "📊 Analytics":
-        st.markdown("<h2>Regional Analytics Matrix</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a !important;'>Regional Analytics Matrix</h2>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("GENERATE TELEMETRY REPORT"):
             try:
@@ -353,11 +365,11 @@ else:
     # 4. COUNSELLING & REPORTS VIEWS
     # =========================================================================
     elif selected_option in ["💬 Counselling", "📋 Reports"]:
-        st.markdown(f"<h2>{selected_option} Hub</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='color: #0f172a !important;'>{selected_option} Hub</h2>", unsafe_allow_html=True)
         col_a1, col_a2 = st.columns(2, gap="large")
         with col_a1:
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            st.markdown("<h4>Automated SMS & Ticket Dispatch</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='color: #0f172a !important;'>Automated SMS & Ticket Dispatch</h4>", unsafe_allow_html=True)
             target_student_id = st.text_input("Target Student ID", placeholder="e.g., RJ-JP-2026-890", key="alert_id_input")
             if st.button("DISPATCH EMERGENCY TICKET"):
                 if target_student_id:
@@ -369,7 +381,7 @@ else:
             st.markdown('</div>', unsafe_allow_html=True)
         with col_a2:
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            st.markdown("<h4>Post-Intervention Reassessment</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='color: #0f172a !important;'>Post-Intervention Reassessment</h4>", unsafe_allow_html=True)
             reass_id = st.text_input("Target Student ID for Review", placeholder="e.g., RJ-JP-2026-890", key="reass_id_input")
             intervention_action = st.selectbox("Applied Protocol", options=["FEE_ASSISTANCE", "ATTENDANCE_COUNSELING", "ACADEMIC_REMEDIAL"])
             if st.button("PROCESS REASSESSMENT"):
