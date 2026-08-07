@@ -241,7 +241,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (Expanded with comprehensive backend features)
+# STATE 2: DASHBOARD VIEW (Connected via API Requests)
 # =========================================================================
 else:
     st.markdown("""
@@ -283,7 +283,7 @@ else:
     """, unsafe_allow_html=True)
 
     # =========================================================================
-    # 1. AI PREDICTION VIEW (Expanded with full backend schema parameters)
+    # 1. AI PREDICTION VIEW
     # =========================================================================
     if selected_option == "AI Prediction":
         st.markdown("<h2 style='color: #0f172a !important;'>Individual Student Vulnerability Assessment</h2>", unsafe_allow_html=True)
@@ -375,16 +375,14 @@ else:
                     "Grade_2": float(final_grade),
                     "Final_Grade": float(final_grade)
                 }
-                
                 try:
-                    with st.spinner("Processing neural vector telemetry and calling backend prediction engines..."):
-                        # Call prediction function mapping directly to backend logic
-                        from backend import predict_risk_for_new_student, generate_counseling_plan, send_sms_via_fast2sms
-                        
-                        res_data = predict_risk_for_new_student(payload)
+                    with st.spinner("Processing neural vector telemetry..."):
+                        response = requests.post(f"{API_BASE_URL}/api/predict/custom", json=payload, timeout=15)
+                    if response.status_code == 200:
+                        res_data = response.json()
                         risk_score = res_data.get("risk_score", 0.0)
                         tier = res_data.get("risk_tier", "Low Risk")
-                        factors = res_data.get("risk_factors", [])
+                        factors = res_data.get("top_factors", ["Stable baseline indicators"])
                         
                         badge_class = "badge-stable"
                         if "High" in str(tier): badge_class = "badge-critical"
@@ -401,83 +399,34 @@ else:
                                 </div>
                             </div>
                         """, unsafe_allow_html=True)
-
-                        # Render Risk Factors & Tailored Counseling Plan
-                        col_r1, col_r2 = st.columns(2, gap="large")
-                        with col_r1:
-                            st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-                            st.markdown("<h4 style='color: #0f172a !important;'>Primary Risk Triggers</h4>", unsafe_allow_html=True)
-                            if factors:
-                                for f in factors:
-                                    st.markdown(f"- {f}")
-                            else:
-                                st.markdown("No severe risk indicators identified.")
-                            st.markdown('</div>', unsafe_allow_html=True)
-                            
-                        with col_r2:
-                            st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-                            st.markdown("<h4 style='color: #0f172a !important;'>Recommended Counseling Plan</h4>", unsafe_allow_html=True)
-                            counseling_plan = generate_counseling_plan(payload, tier)
-                            for action in counseling_plan.get("recommended_actions", []):
-                                st.markdown(f"* {action}")
-                            st.markdown('</div>', unsafe_allow_html=True)
-
-                        # If High Risk, trigger Fast2SMS action option
-                        if "High" in str(tier):
-                            st.warning("High Risk threshold exceeded. Instant SMS Alert integration ready.")
-                            if st.button("Trigger Fast2SMS Instant Alert to Parent"):
-                                sms_res = send_sms_via_fast2sms(parent_phone, student_id, "; ".join(factors))
-                                st.success(f"SMS API Response: {sms_res}")
-
+                    else:
+                        st.error("Prediction API failed.")
                 except Exception as ex:
-                    st.error(f"Prediction execution failure: {ex}")
+                    st.error(f"Connection failure: {ex}")
 
     # =========================================================================
-    # 2. STUDENTS REPOSITORY VIEW (CRUD Support)
+    # 2. STUDENTS REPOSITORY VIEW
     # =========================================================================
     elif selected_option == "Students":
-        st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository & Management</h2>", unsafe_allow_html=True)
-        
-        tab_view, tab_add = st.tabs(["View Records", "Add New Student"])
-        
-        with tab_view:
-            st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            if st.button("REFRESH DATABASE RECORDS"):
-                try:
-                    from backend import get_all_students
-                    records = get_all_students()
+        st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository</h2>", unsafe_allow_html=True)
+        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
+        if st.button("SYNC DATABASE RECORDS"):
+            try:
+                with st.spinner("Querying repository via API..."):
+                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
+                if resp.status_code == 200:
+                    records = resp.json()
                     if records:
                         df_students = pd.DataFrame(records)
-                        st.success(f"Loaded {len(df_students)} student records from local storage/Supabase.")
+                        st.success(f"Loaded {len(df_students)} records.")
                         st.dataframe(df_students, use_container_width=True)
                     else:
                         st.info("Repository empty.")
-                except Exception as e:
-                    st.error(f"Error: {e}")
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        with tab_add:
-            st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            st.markdown("<h4 style='color: #0f172a !important;'>Register Student Record</h4>", unsafe_allow_html=True)
-            with st.form("add_student_form"):
-                new_id = st.text_input("Student ID", value="STU9999")
-                new_name = st.text_input("Name", value="Aarav Sharma")
-                new_school = st.selectbox("School", options=["School_A", "School_B"], key="add_school")
-                new_fees = st.selectbox("Fees Status", options=["fully paid for the year", "last 5 months not paid"], key="add_fees")
-                new_absences = st.number_input("Absences", value=2)
-                new_grade = st.number_input("Final Grade", value=14.0)
-                
-                submit_add = st.form_submit_button("Save Student to Database")
-                if submit_add:
-                    from backend import add_student
-                    new_rec = {
-                        "Student_ID": new_id, "Name": new_name, "School": new_school,
-                        "Fees_Paid_Status": new_fees, "Number_of_Absences": new_absences,
-                        "Final_Grade": new_grade, "Dropped_Out": 0
-                    }
-                    res_msg = add_student(new_rec)
-                    st.success(res_msg)
-            st.markdown('</div>', unsafe_allow_html=True)
+                else:
+                    st.error("API Query failed.")
+            except Exception as e:
+                st.error(f"Error: {e}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
     # 3. ANALYTICS VIEW
@@ -487,59 +436,67 @@ else:
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("GENERATE TELEMETRY REPORT"):
             try:
-                from backend import get_district_analytics
-                analytics_data = get_district_analytics()
-                summary = analytics_data.get("summary", {})
-                schools = analytics_data.get("school_metrics", [])
-                
-                k1, k2, k3, k4 = st.columns(4)
-                with k1: st.metric("Total Monitored", summary.get("total_students_monitored", 0))
-                with k2: st.metric("Historical Dropouts", summary.get("historical_dropouts", 0))
-                with k3: st.metric("Unpaid Fee Issues", summary.get("students_with_unpaid_fees", 0))
-                with k4: st.metric("Chronic Absences", summary.get("students_chronically_absent", 0))
-                
-                if schools:
-                    st.markdown("#### School-wise Aggregated Breakdown")
-                    st.dataframe(pd.DataFrame(schools), use_container_width=True)
+                with st.spinner("Aggregating macro metrics via API..."):
+                    resp = requests.get(f"{API_BASE_URL}/api/analytics/district", timeout=10)
+                if resp.status_code == 200:
+                    analytics_data = resp.json()
+                    summary = analytics_data.get("summary", {})
+                    schools = analytics_data.get("school_metrics", [])
+                    
+                    k1, k2, k3, k4 = st.columns(4)
+                    with k1: st.metric("Total Monitored", summary.get("total_students_monitored", 0))
+                    with k2: st.metric("Historical Dropouts", summary.get("historical_dropouts", 0))
+                    with k3: st.metric("Unpaid Fee Issues", summary.get("students_with_unpaid_fees", 0))
+                    with k4: st.metric("Chronic Absences", summary.get("students_chronically_absent", 0))
+                    
+                    if schools:
+                        st.dataframe(pd.DataFrame(schools), use_container_width=True)
+                else:
+                    st.error("Failed to load telemetry metrics.")
             except Exception as e:
                 st.error(f"Error: {e}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 4. COUNSELLING & REPORTS VIEWS (Intervention Reassessment & Fast2SMS)
+    # 4. COUNSELLING & REPORTS VIEWS
     # =========================================================================
     elif selected_option in ["Counselling", "Reports"]:
-        st.markdown(f"<h2 style='color: #0f172a !important;'>{selected_option} & Intervention Hub</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='color: #0f172a !important;'>{selected_option} Hub</h2>", unsafe_allow_html=True)
         col_a1, col_a2 = st.columns(2, gap="large")
-        
         with col_a1:
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-            st.markdown("<h4 style='color: #0f172a !important;'>Instant SMS Dispatch (Fast2SMS)</h4>", unsafe_allow_html=True)
-            alert_student_id = st.text_input("Target Student ID for SMS", placeholder="e.g., STU1000")
-            target_phone = st.text_input("Recipient Phone Number", value="8110025181")
-            if st.button("DISPATCH INSTANT FAST2SMS ALERT"):
-                if alert_student_id:
+            st.markdown("<h4 style='color: #0f172a !important;'>Automated SMS & Ticket Dispatch</h4>", unsafe_allow_html=True)
+            target_student_id = st.text_input("Target Student ID", placeholder="e.g., STU1000", key="alert_id_input")
+            if st.button("DISPATCH EMERGENCY TICKET"):
+                if target_student_id:
                     try:
-                        from backend import dispatch_high_risk_alerts
-                        sms_res = dispatch_high_risk_alerts(alert_student_id, target_phone)
-                        st.success(f"Alert Status: {sms_res}")
+                        resp = requests.post(f"{API_BASE_URL}/api/alerts/dispatch/{target_student_id}", timeout=10)
+                        if resp.status_code == 200:
+                            st.success(f"Ticket dispatched for student `{target_student_id}`.")
+                        else:
+                            st.error("Ticket dispatch failed.")
                     except Exception as err:
                         st.error(f"Error: {err}")
             st.markdown('</div>', unsafe_allow_html=True)
-            
         with col_a2:
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
             st.markdown("<h4 style='color: #0f172a !important;'>Post-Intervention Reassessment</h4>", unsafe_allow_html=True)
             reass_id = st.text_input("Target Student ID for Review", placeholder="e.g., STU1000", key="reass_id_input")
-            intervention_action = st.selectbox("Applied Protocol", options=["FEE_ASSISTANCE", "ATTENDANCE_COUNSELING", "ACADEMIC_TUTORING"])
-            if st.button("PROCESS INTERVENTION & REASSESS"):
+            intervention_action = st.selectbox("Applied Protocol", options=["FEE_ASSISTANCE", "ATTENDANCE_COUNSELING", "ACADEMIC_REMEDIAL"])
+            if st.button("PROCESS REASSESSMENT"):
                 if reass_id:
                     try:
-                        from backend import apply_intervention_and_reassess
-                        reass_res = apply_intervention_and_reassess(reass_id, intervention_action)
-                        st.success(f"Intervention successfully applied for **{reass_id}**.")
-                        st.markdown(f"- **New Risk Score:** `{reass_res.get('new_risk_score', 'N/A')}%`")
-                        st.markdown(f"- **New Risk Tier:** `{reass_res.get('new_risk_tier', 'N/A')}`")
+                        resp = requests.post(
+                            f"{API_BASE_URL}/api/interventions/reassess/{reass_id}", 
+                            params={"intervention_type": intervention_action}, 
+                            timeout=10
+                        )
+                        if resp.status_code == 200:
+                            res_json = resp.json()
+                            st.success(f"Profile updated for **{reass_id}**.")
+                            st.markdown(f"- **Revised Score:** `{res_json.get('risk_score', 'N/A')}%`")
+                        else:
+                            st.error("Reassessment failed.")
                     except Exception as err:
                         st.error(f"Error: {err}")
             st.markdown('</div>', unsafe_allow_html=True)
