@@ -4,7 +4,7 @@ import requests
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="RAJ-AEGIS | Studio Edition",
+    page_title="RAJ-AEGIS | Dropout Prediction",
     page_icon="▪️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -46,7 +46,7 @@ st.markdown("""
     }
     .landing-title {
         font-family: 'Syne', sans-serif;
-        font-size: 44px;
+        font-size: 42px;
         font-weight: 800;
         letter-spacing: -1.5px;
         color: #0f172a;
@@ -184,7 +184,7 @@ if st.session_state.app_state == 'landing':
                 Government of Rajasthan | Smart India Hackathon Initiative
             </div>
             <div class="landing-title">
-                RAJ-AEGIS <span style="color: #64748b; font-weight: 400;">// STUDIO</span>
+                RAJ-AEGIS <span style="color: #64748b; font-weight: 400;">// Dropout Prediction</span>
             </div>
             <div class="landing-subtitle">
                 An advanced institutional early warning and predictive machine learning platform designed to proactively track student retention, compute vulnerability indexes, and coordinate administrative counseling across the State of Rajasthan.
@@ -400,7 +400,7 @@ else:
                 if resp.status_code == 200:
                     analytics_data = resp.json()
                     summary = analytics_data.get("summary", {})
-                    schools = analytics_data.get("school_metrics", [])
+                    schools = analytics_data.get("school_metrics", {})
                     
                     k1, k2, k3, k4 = st.columns(4)
                     with k1: st.metric("Total Monitored", summary.get("total_students_monitored", 0))
