@@ -169,7 +169,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING PAGE (No left sidebar, updated project name & team details)
+# STATE 1: LANDING PAGE (Professional, No Emojis, Updated Project Name & Team)
 # =========================================================================
 if st.session_state.app_state == 'landing':
     st.markdown("""
@@ -236,12 +236,12 @@ if st.session_state.app_state == 'landing':
     
     col_btn1, col_btn2, col_btn3 = st.columns([2, 2, 2])
     with col_btn2:
-        if st.button("🚀 Get Started // Enter Dashboard", use_container_width=True):
+        if st.button("Get Started // Enter Dashboard", use_container_width=True):
             st.session_state.app_state = 'dashboard'
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW
+# STATE 2: DASHBOARD VIEW (Professional, No Emojis)
 # =========================================================================
 else:
     st.markdown("""
@@ -257,17 +257,17 @@ else:
         selected_option = st.radio(
             "Navigation",
             [
-                "🤖 AI Prediction", 
-                "🎓 Students", 
-                "📊 Analytics", 
-                "💬 Counselling", 
-                "📋 Reports"
+                "AI Prediction", 
+                "Students", 
+                "Analytics", 
+                "Counselling", 
+                "Reports"
             ],
             label_visibility="collapsed"
         )
         
         st.markdown("<br><br><br>", unsafe_allow_html=True)
-        if st.button("🚪 Logout", use_container_width=True):
+        if st.button("Logout", use_container_width=True):
             st.session_state.app_state = 'landing'
             st.rerun()
 
@@ -278,14 +278,14 @@ else:
                 <h1 style="margin:0; font-size: 28px; font-family: 'Syne', sans-serif; color: #0f172a !important;">Government of Rajasthan</h1>
                 <p style="margin:4px 0 0 0; color: #64748b !important; font-size: 13px;">AI-based Student Dropout Prediction System</p>
             </div>
-            <div style="color: #475569 !important; font-weight: 600;">👤 Admin</div>
+            <div style="color: #475569 !important; font-weight: 600;">Admin Portal</div>
         </div>
     """, unsafe_allow_html=True)
 
     # =========================================================================
     # 1. AI PREDICTION VIEW
     # =========================================================================
-    if selected_option == "🤖 AI Prediction":
+    if selected_option == "AI Prediction":
         st.markdown("<h2 style='color: #0f172a !important;'>Individual Student Vulnerability Assessment</h2>", unsafe_allow_html=True)
         
         with st.form("evaluation_form"):
@@ -366,7 +366,7 @@ else:
     # =========================================================================
     # 2. STUDENTS REPOSITORY VIEW
     # =========================================================================
-    elif selected_option == "🎓 Students":
+    elif selected_option == "Students":
         st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository</h2>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("SYNC DATABASE RECORDS"):
@@ -390,7 +390,7 @@ else:
     # =========================================================================
     # 3. ANALYTICS VIEW
     # =========================================================================
-    elif selected_option == "📊 Analytics":
+    elif selected_option == "Analytics":
         st.markdown("<h2 style='color: #0f172a !important;'>Regional Analytics Matrix</h2>", unsafe_allow_html=True)
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
         if st.button("GENERATE TELEMETRY REPORT"):
@@ -400,7 +400,7 @@ else:
                 if resp.status_code == 200:
                     analytics_data = resp.json()
                     summary = analytics_data.get("summary", {})
-                    schools = analytics_data.get("school_metrics", {})
+                    schools = analytics_data.get("school_metrics", [])
                     
                     k1, k2, k3, k4 = st.columns(4)
                     with k1: st.metric("Total Monitored", summary.get("total_students_monitored", 0))
@@ -417,7 +417,7 @@ else:
     # =========================================================================
     # 4. COUNSELLING & REPORTS VIEWS
     # =========================================================================
-    elif selected_option in ["💬 Counselling", "📋 Reports"]:
+    elif selected_option in ["Counselling", "Reports"]:
         st.markdown(f"<h2 style='color: #0f172a !important;'>{selected_option} Hub</h2>", unsafe_allow_html=True)
         col_a1, col_a2 = st.columns(2, gap="large")
         with col_a1:
