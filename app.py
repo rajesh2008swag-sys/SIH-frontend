@@ -16,7 +16,7 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Styling (Light Mode for Landing Page container, Dark Sidebar with exact requested menu options)
+# 2. Styling (Light Mode for Landing Page container, Dark Sidebar with AI Prediction as default menu option)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -155,7 +155,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING PAGE (Exact White Theme Matching Uploaded Image)
+# STATE 1: LANDING PAGE
 # =========================================================================
 if st.session_state.app_state == 'landing':
     with st.sidebar:
@@ -208,10 +208,9 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (With Left Vertical Panel Options matching your screenshot)
+# STATE 2: DASHBOARD VIEW (AI Prediction set as default first page)
 # =========================================================================
 else:
-    # Force dark background for dashboard view to match the requested left panel aesthetic
     st.markdown("""
         <style>
         .stApp { background-color: #000000 !important; color: #f3f4f6 !important; }
@@ -222,13 +221,12 @@ else:
         st.markdown("### **EduShield AI**")
         st.markdown("---")
         
-        # Vertical Left Navigation Options matching your screenshot
+        # Vertical Left Navigation Options (Dashboard removed, AI Prediction is first)
         selected_option = st.radio(
             "Navigation",
             [
-                "🏠 Dashboard", 
-                "🎓 Students", 
                 "🤖 AI Prediction", 
+                "🎓 Students", 
                 "📊 Analytics", 
                 "💬 Counselling", 
                 "📋 Reports"
@@ -237,7 +235,6 @@ else:
         )
         
         st.markdown("<br><br><br>", unsafe_allow_html=True)
-        # Red Logout button mimicking your exact screenshot reference
         if st.button("🚪 Logout", use_container_width=True):
             st.session_state.app_state = 'landing'
             st.rerun()
@@ -254,79 +251,9 @@ else:
     """, unsafe_allow_html=True)
 
     # =========================================================================
-    # 1. DASHBOARD VIEW
+    # 1. AI PREDICTION VIEW (Now First Page)
     # =========================================================================
-    if selected_option == "🏠 Dashboard":
-        st.markdown("<h2>Dashboard</h2>", unsafe_allow_html=True)
-        
-        m1, m2, m3, m4 = st.columns(4)
-        with m1:
-            st.markdown("""
-                <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #ffffff;">5</h1>
-                    <p style="margin:5px 0 0 0; color: #a3a3a3; font-size: 13px;">Students</p>
-                </div>
-            """, unsafe_allow_html=True)
-        with m2:
-            st.markdown("""
-                <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #ff5252;">2</h1>
-                    <p style="margin:5px 0 0 0; color: #a3a3a3; font-size: 13px;">High Risk</p>
-                </div>
-            """, unsafe_allow_html=True)
-        with m3:
-            st.markdown("""
-                <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #ffb100;">1</h1>
-                    <p style="margin:5px 0 0 0; color: #a3a3a3; font-size: 13px;">Medium Risk</p>
-                </div>
-            """, unsafe_allow_html=True)
-        with m4:
-            st.markdown("""
-                <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #00e676;">2</h1>
-                    <p style="margin:5px 0 0 0; color: #a3a3a3; font-size: 13px;">Low Risk</p>
-                </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### High Risk Students")
-        risk_data = {
-            "Name": ["Rahul Sharma", "Priya Singh"],
-            "Attendance": [54, 62],
-            "CGPA": [5.8, 6.2],
-            "Risk": ["High", "High"]
-        }
-        st.dataframe(pd.DataFrame(risk_data), use_container_width=True, hide_index=True)
-
-    # =========================================================================
-    # 2. STUDENTS REPOSITORY VIEW
-    # =========================================================================
-    elif selected_option == "🎓 Students":
-        st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
-        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-        if st.button("SYNC DATABASE RECORDS"):
-            try:
-                with st.spinner("Querying repository..."):
-                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
-                if resp.status_code == 200:
-                    records = resp.json()
-                    if records:
-                        df_students = pd.DataFrame(records)
-                        st.success(f"Loaded {len(df_students)} records.")
-                        st.dataframe(df_students, use_container_width=True)
-                    else:
-                        st.info("Repository empty.")
-                else:
-                    st.error("Query failed.")
-            except Exception as e:
-                st.error(f"Error: {e}")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # =========================================================================
-    # 3. AI PREDICTION VIEW
-    # =========================================================================
-    elif selected_option == "🤖 AI Prediction":
+    if selected_option == "🤖 AI Prediction":
         st.markdown("<h2>Individual Student Vulnerability Assessment</h2>", unsafe_allow_html=True)
         
         with st.form("evaluation_form"):
@@ -405,7 +332,31 @@ else:
                     st.error(f"Connection failure: {ex}")
 
     # =========================================================================
-    # 4. ANALYTICS VIEW
+    # 2. STUDENTS REPOSITORY VIEW
+    # =========================================================================
+    elif selected_option == "🎓 Students":
+        st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
+        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
+        if st.button("SYNC DATABASE RECORDS"):
+            try:
+                with st.spinner("Querying repository..."):
+                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
+                if resp.status_code == 200:
+                    records = resp.json()
+                    if records:
+                        df_students = pd.DataFrame(records)
+                        st.success(f"Loaded {len(df_students)} records.")
+                        st.dataframe(df_students, use_container_width=True)
+                    else:
+                        st.info("Repository empty.")
+                else:
+                    st.error("Query failed.")
+            except Exception as e:
+                st.error(f"Error: {e}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # =========================================================================
+    # 3. ANALYTICS VIEW
     # =========================================================================
     elif selected_option == "📊 Analytics":
         st.markdown("<h2>Regional Analytics Matrix</h2>", unsafe_allow_html=True)
@@ -432,7 +383,7 @@ else:
         st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 5. COUNSELLING & REPORTS VIEWS
+    # 4. COUNSELLING & REPORTS VIEWS
     # =========================================================================
     elif selected_option in ["💬 Counselling", "📋 Reports"]:
         st.markdown(f"<h2>{selected_option} Hub</h2>", unsafe_allow_html=True)
