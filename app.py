@@ -169,10 +169,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING PAGE (No left sidebar, includes Team details & Prepared By)
+# STATE 1: LANDING PAGE (No left sidebar, updated project name & Team details)
 # =========================================================================
 if st.session_state.app_state == 'landing':
-    # Completely hidden sidebar via empty block check or CSS hide
     st.markdown("""
         <style>
         [data-testid="stSidebar"] {display: none !important;}
@@ -185,7 +184,7 @@ if st.session_state.app_state == 'landing':
                 Government of Rajasthan | Smart India Hackathon Initiative
             </div>
             <div class="landing-title">
-                EduShield AI <span style="color: #64748b; font-weight: 400;">// STUDIO</span>
+                RAJ-AEGIS <span style="color: #64748b; font-weight: 400;">// STUDIO</span>
             </div>
             <div class="landing-subtitle">
                 An advanced institutional early warning and predictive machine learning platform designed to proactively track student retention, compute vulnerability indexes, and coordinate administrative counseling across the State of Rajasthan.
