@@ -169,7 +169,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: LANDING PAGE (No left sidebar, updated project name & Team details)
+# STATE 1: LANDING PAGE (No left sidebar, updated project name & team details)
 # =========================================================================
 if st.session_state.app_state == 'landing':
     st.markdown("""
@@ -241,7 +241,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (Restores sidebar for navigation once Get Started is clicked)
+# STATE 2: DASHBOARD VIEW
 # =========================================================================
 else:
     st.markdown("""
