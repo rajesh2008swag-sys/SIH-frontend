@@ -16,15 +16,15 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'introduction'  # Starts on introduction page
 
-# 2. Jordan Studio White Theme & Sidebar Customization CSS
+# 2. Clean White Studio Theme with Colorful Cards CSS
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
     .main {
-        background-color: #f8fafc;
+        background-color: #ffffff !important;
         font-family: 'Inter', sans-serif;
-        color: #0f172a;
+        color: #0f172a !important;
     }
     
     /* Left Sidebar Matching Reference Image */
@@ -48,9 +48,35 @@ st.markdown("""
         align-items: center;
     }
 
-    /* Clean White Cards */
+    /* Colorful Feature Cards for Intro */
+    .card-cyan {
+        background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+        border: 1px solid #06b6d4;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        color: #0e7490;
+    }
+    .card-purple {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        border: 1px solid #8b5cf6;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        color: #6d28d9;
+    }
+    .card-amber {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        border: 1px solid #f59e0b;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        color: #b45309;
+    }
+
+    /* Standard Dashboard Cards */
     .studio-card {
-        background-color: #ffffff;
+        background-color: #f8fafc;
         border: 1px solid #e2e8f0;
         padding: 24px;
         border-radius: 12px;
@@ -64,7 +90,7 @@ st.markdown("""
         color: white;
         border-radius: 8px;
         font-weight: 600;
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1.2rem;
         border: none;
         transition: all 0.2s;
     }
@@ -105,23 +131,23 @@ if st.session_state.app_state == 'introduction':
     col1, col2, col3 = st.columns(3, gap="large")
     with col1:
         st.markdown("""
-            <div class="studio-card">
-                <h4>📊 Risk Profiler</h4>
-                <p style="font-size: 13px; color: #64748b;">Instant predictive evaluations using advanced machine learning models.</p>
+            <div class="card-cyan">
+                <h4 style="color: #0e7490; margin-top:0;">📊 Risk Profiler</h4>
+                <p style="font-size: 13px; color: #155e75; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
             </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
-            <div class="studio-card">
-                <h4>👥 Student Repository</h4>
-                <p style="font-size: 13px; color: #64748b;">Centralized database synchronization for live student records.</p>
+            <div class="card-purple">
+                <h4 style="color: #6d28d9; margin-top:0;">👥 Student Repository</h4>
+                <p style="font-size: 13px; color: #5b21b6; margin-bottom:0;">Centralized database synchronization for live student records.</p>
             </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
-            <div class="studio-card">
-                <h4>🚨 Intervention Hub</h4>
-                <p style="font-size: 13px; color: #64748b;">Automated alert dispatch and counselor ticket management.</p>
+            <div class="card-amber">
+                <h4 style="color: #b45309; margin-top:0;">🚨 Intervention Hub</h4>
+                <p style="font-size: 13px; color: #92400e; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -154,7 +180,6 @@ else:
         )
         
         st.markdown("<br><br><br>", unsafe_allow_html=True)
-        # Red Logout button mimicking reference screenshot
         if st.button("🚪 Logout", use_container_width=True):
             st.session_state.app_state = 'introduction'
             st.rerun()
@@ -169,14 +194,14 @@ else:
 
     # 1. DASHBOARD
     if selected_option == "🏠 Dashboard":
-        st.markdown("<h2>Dashboard</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a;'>Dashboard</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; margin-top: -10px; margin-bottom: 25px;'>Government of Rajasthan • AI-based Student Dropout Prediction System</p>", unsafe_allow_html=True)
 
         m1, m2, m3, m4 = st.columns(4)
         with m1:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700;">5</h1>
+                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #0f172a;">5</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">Students</p>
                 </div>
             """, unsafe_allow_html=True)
@@ -203,7 +228,7 @@ else:
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### High Risk Students")
+        st.markdown("<h3 style='color: #0f172a;'>High Risk Students</h3>", unsafe_allow_html=True)
         risk_data = {
             "Name": ["Rahul Sharma", "Priya Singh"],
             "Attendance": [54, 62],
@@ -214,7 +239,7 @@ else:
 
     # 2. STUDENTS REPOSITORY
     elif selected_option == "👥 Students":
-        st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a;'>Master Student Repository</h2>", unsafe_allow_html=True)
         if st.button("🔄 Sync Database Records"):
             try:
                 with st.spinner("Fetching cloud records..."):
@@ -232,7 +257,7 @@ else:
 
     # 3. AI PREDICTION
     elif selected_option == "⚡ AI Prediction":
-        st.markdown("<h2>AI Vulnerability Prediction</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a;'>AI Vulnerability Prediction</h2>", unsafe_allow_html=True)
         with st.form("prediction_form"):
             col_f1, col_f2 = st.columns(2, gap="large")
             with col_f1:
@@ -289,7 +314,7 @@ else:
 
     # 4. ANALYTICS
     elif selected_option == "📊 Analytics":
-        st.markdown("<h2>Regional Intelligence & Analytics</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a;'>Regional Intelligence & Analytics</h2>", unsafe_allow_html=True)
         if st.button("Generate District Telemetry"):
             try:
                 with st.spinner("Aggregating macro metrics..."):
@@ -315,7 +340,7 @@ else:
 
     # 5. COUNSELLING & REPORTS
     elif selected_option in ["💬 Counselling", "📋 Reports"]:
-        st.markdown(f"<h2>{selected_option} Hub</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='color: #0f172a;'>{selected_option} Hub</h2>", unsafe_allow_html=True)
         target_id = st.text_input("Enter Student ID for Action", placeholder="e.g., RJ-JP-2026-890")
         if st.button("🚨 Dispatch Emergency Intervention Ticket"):
             if target_id:
