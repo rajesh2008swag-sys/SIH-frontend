@@ -241,7 +241,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (Connected via API Requests)
+# STATE 2: DASHBOARD VIEW (With Integrated Native Graphs and Charts)
 # =========================================================================
 else:
     st.markdown("""
@@ -382,7 +382,6 @@ else:
                         res_data = response.json()
                         risk_score = res_data.get("risk_score", 0.0)
                         tier = res_data.get("risk_tier", "Low Risk")
-                        factors = res_data.get("top_factors", ["Stable baseline indicators"])
                         
                         badge_class = "badge-stable"
                         if "High" in str(tier): badge_class = "badge-critical"
@@ -413,7 +412,7 @@ else:
         if st.button("SYNC DATABASE RECORDS"):
             try:
                 with st.spinner("Querying repository via API..."):
-                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
+                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=15)
                 if resp.status_code == 200:
                     records = resp.json()
                     if records:
@@ -429,32 +428,80 @@ else:
         st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 3. ANALYTICS VIEW
+    # 3. ANALYTICS VIEW (With Native Streamlit Charts & Graphs)
     # =========================================================================
     elif selected_option == "Analytics":
-        st.markdown("<h2 style='color: #0f172a !important;'>Regional Analytics Matrix</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #0f172a !important;'>Regional Analytics & Visual Telemetry</h2>", unsafe_allow_html=True)
+        
         st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-        if st.button("GENERATE TELEMETRY REPORT"):
+        if st.button("GENERATE TELEMETRY REPORT & CHARTS"):
             try:
-                with st.spinner("Aggregating macro metrics via API..."):
-                    resp = requests.get(f"{API_BASE_URL}/api/analytics/district", timeout=10)
-                if resp.status_code == 200:
-                    analytics_data = resp.json()
+                with st.spinner("Aggregating macro metrics and rendering visualizations via API..."):
+                    # 1. Fetch district analytics summary
+                    resp_analytics = requests.get(f"{API_BASE_URL}/api/analytics/district", timeout=15)
+                    # 2. Fetch full student list to build detailed charts
+                    resp_students = requests.get(f"{API_BASE_URL}/api/students", timeout=15)
+                    
+                if resp_analytics.status_code == 200:
+                    analytics_data = resp_analytics.json()
                     summary = analytics_data.get("summary", {})
                     schools = analytics_data.get("school_metrics", [])
                     
+                    # Top Metrics Overview
                     k1, k2, k3, k4 = st.columns(4)
                     with k1: st.metric("Total Monitored", summary.get("total_students_monitored", 0))
                     with k2: st.metric("Historical Dropouts", summary.get("historical_dropouts", 0))
                     with k3: st.metric("Unpaid Fee Issues", summary.get("students_with_unpaid_fees", 0))
                     with k4: st.metric("Chronic Absences", summary.get("students_chronically_absent", 0))
                     
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    
+                    # If student database records are available, render native charts
+                    if resp_students.status_code == 200 and resp_students.json():
+                        df_chart = pd.DataFrame(resp_students.json())
+                        
+                        col_g1, col_g2 = st.columns(2, gap="large")
+                        
+                        with col_g1:
+                            st.markdown("#### School-wise Average Final Grades (Bar Chart)")
+                            if 'School' in df_chart.columns and 'Final_Grade' in df_chart.columns:
+                                df_school_avg = df_chart.groupby('School')['Final_Grade'].mean().reset_index()
+                                st.bar_chart(df_school_avg.set_index('School'))
+                            else:
+                                st.info("Insufficient columns for school grade breakdown.")
+                                
+                        with col_g2:
+                            st.markdown("#### Absence Distribution Across Cohort (Area Chart)")
+                            if 'Number_of_Absences' in df_chart.columns:
+                                st.area_chart(df_chart['Number_of_Absences'].value_counts().sort_index())
+                            else:
+                                st.info("Absence data unavailable.")
+                                
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        
+                        col_g3, col_g4 = st.columns(2, gap="large")
+                        
+                        with col_g3:
+                            st.markdown("#### Fee Payment Status Breakdown")
+                            if 'Fees_Paid_Status' in df_chart.columns:
+                                fee_counts = df_chart['Fees_Paid_Status'].value_counts()
+                                st.dataframe(fee_counts, use_container_width=True)
+                                st.bar_chart(fee_counts)
+                                
+                        with col_g4:
+                            st.markdown("#### Dropout Status Proportion")
+                            if 'Dropped_Out' in df_chart.columns:
+                                dropout_counts = df_chart['Dropped_Out'].value_counts().rename(index={0: 'Active Students', 1: 'Dropped Out'})
+                                st.dataframe(dropout_counts, use_container_width=True)
+                                st.bar_chart(dropout_counts)
+
                     if schools:
+                        st.markdown("<br><h4>Detailed School Metrics Table</h4>", unsafe_allow_html=True)
                         st.dataframe(pd.DataFrame(schools), use_container_width=True)
                 else:
-                    st.error("Failed to load telemetry metrics.")
+                    st.error("Failed to load telemetry metrics from API.")
             except Exception as e:
-                st.error(f"Error: {e}")
+                st.error(f"Error connecting to API: {e}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
@@ -470,7 +517,7 @@ else:
             if st.button("DISPATCH EMERGENCY TICKET"):
                 if target_student_id:
                     try:
-                        resp = requests.post(f"{API_BASE_URL}/api/alerts/dispatch/{target_student_id}", timeout=10)
+                        resp = requests.post(f"{API_BASE_URL}/api/alerts/dispatch/{target_student_id}", timeout=15)
                         if resp.status_code == 200:
                             st.success(f"Ticket dispatched for student `{target_student_id}`.")
                         else:
@@ -478,7 +525,7 @@ else:
                     except Exception as err:
                         st.error(f"Error: {err}")
             st.markdown('</div>', unsafe_allow_html=True)
-        with col_a2:
+        with col_g2 if 'col_g2' in locals() else col_a2:
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
             st.markdown("<h4 style='color: #0f172a !important;'>Post-Intervention Reassessment</h4>", unsafe_allow_html=True)
             reass_id = st.text_input("Target Student ID for Review", placeholder="e.g., STU1000", key="reass_id_input")
@@ -489,7 +536,7 @@ else:
                         resp = requests.post(
                             f"{API_BASE_URL}/api/interventions/reassess/{reass_id}", 
                             params={"intervention_type": intervention_action}, 
-                            timeout=10
+                            timeout=15
                         )
                         if resp.status_code == 200:
                             res_json = resp.json()
