@@ -16,7 +16,7 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Complete Theme Styling (Forces clear white inputs, dark readable text, and vibrant elements)
+# 2. Complete Theme Styling (Forces high-contrast white text on buttons and visible form controls)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -94,7 +94,7 @@ st.markdown("""
     .card-amber-box h3 { font-family: 'Syne', sans-serif; color: #b45309; font-size: 18px; margin-bottom: 10px; }
     .card-amber-box p { color: #334155; font-size: 13px; margin: 0; line-height: 1.5; }
 
-    /* Dashboard Vibrant White Theme Cards & High-Contrast Text */
+    /* Dashboard Cards */
     .studio-card {
         background-color: #ffffff;
         border: 2px solid #e2e8f0;
@@ -107,7 +107,7 @@ st.markdown("""
         color: #0f172a !important;
     }
 
-    /* Force Streamlit Input Fields & Selectboxes to have White Background and Dark Visible Text */
+    /* Force Streamlit Input Fields */
     .stTextInput input, .stNumberInput input, div[data-baseweb="select"] {
         background-color: #f8fafc !important;
         color: #0f172a !important;
@@ -118,16 +118,22 @@ st.markdown("""
         color: #0f172a !important;
     }
 
-    /* Force Streamlit Buttons to be Vibrant Blue with White Text */
-    .stButton>button {
+    /* Force ALL Streamlit Buttons to be Bright Blue with Crisp White Text */
+    div.stButton > button, button[kind="secondary"], button[kind="primary"], .stFormSubmitButton > button {
         background-color: #2563eb !important;
         color: #ffffff !important;
-        font-weight: 600 !important;
+        -webkit-text-fill-color: #ffffff !important;
+        font-weight: 700 !important;
         border-radius: 8px !important;
         padding: 0.6rem 1.2rem !important;
         border: none !important;
+        opacity: 1 !important;
     }
-    .stButton>button:hover {
+    div.stButton > button * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    div.stButton > button:hover, .stFormSubmitButton > button:hover {
         background-color: #1d4ed8 !important;
         color: #ffffff !important;
     }
@@ -205,7 +211,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (White Background & Always Visible Text Inputs)
+# STATE 2: DASHBOARD VIEW
 # =========================================================================
 else:
     st.markdown("""
