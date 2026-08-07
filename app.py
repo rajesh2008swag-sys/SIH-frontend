@@ -16,32 +16,16 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'introduction'
 
-# 2. Strict Light Mode Theme CSS Overrides
+# 2. Clean Streamlit Light Theme Styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    /* Force Full Page Background White & Text Dark */
-    .stApp, stContainer, [data-testid="stVerticalBlock"] {
+    .main {
         background-color: #ffffff !important;
-        color: #0f172a !important;
+        font-family: 'Inter', sans-serif;
     }
     
-    body, p, span, h1, h2, h3, h4, h5, h6 {
-        color: #0f172a !important;
-        font-family: 'Inter', sans-serif !important;
-    }
-
-    /* Left Sidebar Styling */
-    [data-testid="stSidebar"] {
-        background-color: #0d1117 !important;
-        border-right: 1px solid #21262d;
-        padding-top: 20px;
-    }
-    [data-testid="stSidebar"] * {
-        color: #ffffff !important;
-    }
-
     /* Colorful Feature Cards */
     .card-cyan {
         background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
@@ -49,29 +33,24 @@ st.markdown("""
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #0e7490 !important;
+        color: #0e7490;
     }
-    .card-cyan * { color: #0e7490 !important; }
-
     .card-purple {
         background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         border: 1px solid #8b5cf6;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #6d28d9 !important;
+        color: #6d28d9;
     }
-    .card-purple * { color: #6d28d9 !important; }
-
     .card-amber {
         background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         border: 1px solid #f59e0b;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #b45309 !important;
+        color: #b45309;
     }
-    .card-amber * { color: #b45309 !important; }
 
     .studio-card {
         background-color: #f8fafc;
@@ -83,12 +62,15 @@ st.markdown("""
 
     /* Buttons */
     .stButton>button {
-        background-color: #2563eb !important;
-        color: white !important;
+        background-color: #2563eb;
+        color: white;
         border-radius: 8px;
         font-weight: 600;
         padding: 0.6rem 1.2rem;
         border: none;
+    }
+    .stButton>button:hover {
+        background-color: #1d4ed8;
     }
     
     #MainMenu {visibility: visible;}
@@ -125,22 +107,22 @@ if st.session_state.app_state == 'introduction':
     with col1:
         st.markdown("""
             <div class="card-cyan">
-                <h4 style="margin-top:0;">📊 Risk Profiler</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
+                <h4 style="color: #0e7490; margin-top:0;">📊 Risk Profiler</h4>
+                <p style="font-size: 13px; color: #155e75; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
             </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
             <div class="card-purple">
-                <h4 style="margin-top:0;">👥 Student Repository</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Centralized database synchronization for live student records.</p>
+                <h4 style="color: #6d28d9; margin-top:0;">👥 Student Repository</h4>
+                <p style="font-size: 13px; color: #5b21b6; margin-bottom:0;">Centralized database synchronization for live student records.</p>
             </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
             <div class="card-amber">
-                <h4 style="margin-top:0;">🚨 Intervention Hub</h4>
-                <p style="font-size: 13px; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
+                <h4 style="color: #b45309; margin-top:0;">🚨 Intervention Hub</h4>
+                <p style="font-size: 13px; color: #92400e; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -176,13 +158,6 @@ else:
         if st.button("🚪 Logout", use_container_width=True):
             st.session_state.app_state = 'introduction'
             st.rerun()
-
-    st.markdown("""
-        <div style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 20px 32px; margin: -6rem -6rem 2rem -6rem; display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-weight: 600; font-size: 15px; color: #0f172a;">Government of Rajasthan</div>
-            <div style="font-size: 13px; color: #64748b; font-weight: 500;">👤 Admin</div>
-        </div>
-    """, unsafe_allow_html=True)
 
     if selected_option == "🏠 Dashboard":
         st.markdown("<h2>Dashboard</h2>", unsafe_allow_html=True)
@@ -237,8 +212,6 @@ else:
                     records = resp.json()
                     if records:
                         st.dataframe(pd.DataFrame(records), use_container_width=True)
-                    else:
-                        st.info("No records found.")
             except Exception as e:
                 st.error(f"Error: {e}")
 
@@ -315,3 +288,5 @@ else:
                         st.success(f"Emergency ticket successfully dispatched for student `{target_id}`.")
                 except Exception as e:
                     st.error(f"Error: {e}")
+            else:
+                st.warning("Please enter a valid Student ID.")
