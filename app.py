@@ -16,7 +16,7 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Complete Theme Styling (Forces pure white background and vibrant elements on dashboard, leaves landing page and dark sidebar intact)
+# 2. Complete Theme Styling (Forces clear white inputs, dark readable text, and vibrant elements)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -27,7 +27,7 @@ st.markdown("""
         color: #0f172a !important;
     }
 
-    /* Left Sidebar Styling (Dark to match screenshot) */
+    /* Left Sidebar Styling */
     [data-testid="stSidebar"] {
         background-color: #0d1117 !important;
         border-right: 1px solid #21262d;
@@ -104,6 +104,17 @@ st.markdown("""
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
     .studio-card * {
+        color: #0f172a !important;
+    }
+
+    /* Force Streamlit Input Fields & Selectboxes to have White Background and Dark Visible Text */
+    .stTextInput input, .stNumberInput input, div[data-baseweb="select"] {
+        background-color: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
+    div[data-baseweb="select"] * {
         color: #0f172a !important;
     }
 
@@ -194,7 +205,7 @@ if st.session_state.app_state == 'landing':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW (White Background & High-Visibility Text)
+# STATE 2: DASHBOARD VIEW (White Background & Always Visible Text Inputs)
 # =========================================================================
 else:
     st.markdown("""
