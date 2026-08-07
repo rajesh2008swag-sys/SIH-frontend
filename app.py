@@ -14,43 +14,61 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 
 # Initialize Session State
 if 'app_state' not in st.session_state:
-    st.session_state.app_state = 'introduction'
+    st.session_state.app_state = 'landing'
 
-# 2. Clean Streamlit Light Theme Styling
+# 2. Strict Clean White Theme CSS
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    .main {
+    /* Force Full Page Background to Solid White & Text to Dark Slate */
+    .stApp, [data-testid="stMain"], .main {
         background-color: #ffffff !important;
-        font-family: 'Inter', sans-serif;
+        color: #0f172a !important;
+        font-family: 'Inter', sans-serif !important;
     }
     
-    /* Colorful Feature Cards */
+    h1, h2, h3, h4, h5, h6, p, span, label {
+        color: #0f172a !important;
+    }
+
+    /* Left Sidebar Styling (Light Mode Clean Look) */
+    [data-testid="stSidebar"] {
+        background-color: #f8fafc !important;
+        border-right: 1px solid #e2e8f0;
+        padding-top: 20px;
+    }
+    [data-testid="stSidebar"] * {
+        color: #0f172a !important;
+    }
+
+    /* Landing Page Cards with Soft Colors */
     .card-cyan {
         background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
         border: 1px solid #06b6d4;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #0e7490;
     }
+    .card-cyan * { color: #0e7490 !important; }
+
     .card-purple {
         background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         border: 1px solid #8b5cf6;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #6d28d9;
     }
+    .card-purple * { color: #6d28d9 !important; }
+
     .card-amber {
         background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         border: 1px solid #f59e0b;
         padding: 24px;
         border-radius: 12px;
         margin-bottom: 20px;
-        color: #b45309;
     }
+    .card-amber * { color: #b45309 !important; }
 
     .studio-card {
         background-color: #f8fafc;
@@ -60,17 +78,17 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* Buttons */
+    /* Primary Buttons */
     .stButton>button {
-        background-color: #2563eb;
-        color: white;
+        background-color: #2563eb !important;
+        color: white !important;
         border-radius: 8px;
         font-weight: 600;
         padding: 0.6rem 1.2rem;
         border: none;
     }
     .stButton>button:hover {
-        background-color: #1d4ed8;
+        background-color: #1d4ed8 !important;
     }
     
     #MainMenu {visibility: visible;}
@@ -79,9 +97,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================================
-# STATE 1: INTRODUCTION PAGE
+# STATE 1: LANDING / INTRODUCTION PAGE
 # =========================================================================
-if st.session_state.app_state == 'introduction':
+if st.session_state.app_state == 'landing':
     with st.sidebar:
         st.markdown("### **EduShield AI**")
         st.markdown("---")
@@ -107,22 +125,22 @@ if st.session_state.app_state == 'introduction':
     with col1:
         st.markdown("""
             <div class="card-cyan">
-                <h4 style="color: #0e7490; margin-top:0;">📊 Risk Profiler</h4>
-                <p style="font-size: 13px; color: #155e75; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
+                <h4 style="margin-top:0;">📊 Risk Profiler</h4>
+                <p style="font-size: 13px; margin-bottom:0;">Instant predictive evaluations using advanced machine learning models.</p>
             </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
             <div class="card-purple">
-                <h4 style="color: #6d28d9; margin-top:0;">👥 Student Repository</h4>
-                <p style="font-size: 13px; color: #5b21b6; margin-bottom:0;">Centralized database synchronization for live student records.</p>
+                <h4 style="margin-top:0;">👥 Student Repository</h4>
+                <p style="font-size: 13px; margin-bottom:0;">Centralized database synchronization for live student records.</p>
             </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
             <div class="card-amber">
-                <h4 style="color: #b45309; margin-top:0;">🚨 Intervention Hub</h4>
-                <p style="font-size: 13px; color: #92400e; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
+                <h4 style="margin-top:0;">🚨 Intervention Hub</h4>
+                <p style="font-size: 13px; margin-bottom:0;">Automated alert dispatch and counselor ticket management.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -134,7 +152,7 @@ if st.session_state.app_state == 'introduction':
             st.rerun()
 
 # =========================================================================
-# STATE 2: DASHBOARD VIEW
+# STATE 2: ACTUAL DASHBOARD VIEW
 # =========================================================================
 else:
     with st.sidebar:
@@ -155,9 +173,16 @@ else:
         )
         
         st.markdown("<br><br><br>", unsafe_allow_html=True)
-        if st.button("🚪 Logout", use_container_width=True):
-            st.session_state.app_state = 'introduction'
+        if st.button("🚪 Logout / Overview", use_container_width=True):
+            st.session_state.app_state = 'landing'
             st.rerun()
+
+    st.markdown("""
+        <div style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 20px 32px; margin: -6rem -6rem 2rem -6rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 600; font-size: 15px; color: #0f172a;">Government of Rajasthan</div>
+            <div style="font-size: 13px; color: #64748b; font-weight: 500;">👤 Admin Portal</div>
+        </div>
+    """, unsafe_allow_html=True)
 
     if selected_option == "🏠 Dashboard":
         st.markdown("<h2>Dashboard</h2>", unsafe_allow_html=True)
@@ -167,28 +192,28 @@ else:
         with m1:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #0f172a;">5</h1>
+                    <h1 style="margin:0; font-size: 36px; font-weight: 700; color: #0f172a;">5</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">Students</p>
                 </div>
             """, unsafe_allow_html=True)
         with m2:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #dc2626;">2</h1>
+                    <h1 style="margin:0; font-size: 36px; font-weight: 700; color: #dc2626;">2</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">High Risk</p>
                 </div>
             """, unsafe_allow_html=True)
         with m3:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #d97706;">1</h1>
+                    <h1 style="margin:0; font-size: 36px; font-weight: 700; color: #d97706;">1</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">Medium Risk</p>
                 </div>
             """, unsafe_allow_html=True)
         with m4:
             st.markdown("""
                 <div class="studio-card">
-                    <h1 style="margin:0; font-size: 34px; font-weight: 700; color: #16a34a;">2</h1>
+                    <h1 style="margin:0; font-size: 36px; font-weight: 700; color: #16a34a;">2</h1>
                     <p style="margin:5px 0 0 0; color: #64748b; font-size: 13px;">Low Risk</p>
                 </div>
             """, unsafe_allow_html=True)
@@ -205,18 +230,24 @@ else:
 
     elif selected_option == "👥 Students":
         st.markdown("<h2>Master Student Repository</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #64748b;'>Synchronized records from cloud database.</p>", unsafe_allow_html=True)
         if st.button("🔄 Sync Database Records"):
             try:
-                resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
+                with st.spinner("Fetching cloud records..."):
+                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=10)
                 if resp.status_code == 200:
                     records = resp.json()
                     if records:
                         st.dataframe(pd.DataFrame(records), use_container_width=True)
+                    else:
+                        st.info("No records found in repository.")
             except Exception as e:
-                st.error(f"Error: {e}")
+                st.error(f"Connection error: {e}")
 
     elif selected_option == "⚡ AI Prediction":
         st.markdown("<h2>AI Vulnerability Prediction</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #64748b;'>Provide student institutional telemetry to calculate risk vectors.</p>", unsafe_allow_html=True)
+
         with st.form("prediction_form"):
             col_f1, col_f2 = st.columns(2, gap="large")
             with col_f1:
@@ -242,22 +273,32 @@ else:
 
         if submit_pred:
             if not student_id.strip() or not school_name.strip():
-                st.error("Please fill in Student ID and Institution Name.")
+                st.error("Please fill in both Student ID and Institution Name.")
             else:
                 payload = {
-                    "Student_ID": student_id, "School": school_name, "Gender": gender,
-                    "Fees_Paid_Status": fees_status, "Internet_Access": internet_access,
-                    "Family_Support": family_support, "Wants_Higher_Education": wants_higher_ed,
-                    "Medical_Status": medical_status, "School_Support": "Yes",
-                    "Extra_Paid_Class": "No", "Extra_Curricular_Activities": "Yes",
-                    "Number_of_Absences": int(absences), "Number_of_Failures": int(failures),
+                    "Student_ID": student_id,
+                    "School": school_name,
+                    "Gender": gender,
+                    "Fees_Paid_Status": fees_status,
+                    "Internet_Access": internet_access,
+                    "Family_Support": family_support,
+                    "Wants_Higher_Education": wants_higher_ed,
+                    "Medical_Status": medical_status,
+                    "School_Support": "Yes",
+                    "Extra_Paid_Class": "No",
+                    "Extra_Curricular_Activities": "Yes",
+                    "Number_of_Absences": int(absences),
+                    "Number_of_Failures": int(failures),
                     "Final_Grade": float(final_grade)
                 }
                 try:
-                    res = requests.post(f"{API_BASE_URL}/api/predict/custom", json=payload, timeout=15)
+                    with st.spinner("Computing neural risk vectors..."):
+                        res = requests.post(f"{API_BASE_URL}/api/predict/custom", json=payload, timeout=15)
                     if res.status_code == 200:
                         data = res.json()
                         st.success(f"Risk Score Calculated: **{data.get('risk_score')}%** ({data.get('risk_tier')})")
+                    else:
+                        st.error("Prediction failed.")
                 except Exception as err:
                     st.error(f"Error: {err}")
 
@@ -265,20 +306,32 @@ else:
         st.markdown("<h2>Regional Intelligence & Analytics</h2>", unsafe_allow_html=True)
         if st.button("Generate District Telemetry"):
             try:
-                resp = requests.get(f"{API_BASE_URL}/api/analytics/district", timeout=10)
+                with st.spinner("Aggregating macro metrics..."):
+                    resp = requests.get(f"{API_BASE_URL}/api/analytics/district", timeout=10)
                 if resp.status_code == 200:
                     res_data = resp.json()
                     summary = res_data.get("summary", {})
+                    
                     k1, k2, k3, k4 = st.columns(4)
-                    with k1: st.metric("Monitored", summary.get("total_students_monitored", 0))
-                    with k2: st.metric("Dropouts", summary.get("historical_dropouts", 0))
-                    with k3: st.metric("Unpaid Fees", summary.get("students_with_unpaid_fees", 0))
-                    with k4: st.metric("Absences", summary.get("students_chronically_absent", 0))
+                    with k1:
+                        st.metric("Monitored", summary.get("total_students_monitored", 0))
+                    with k2:
+                        st.metric("Dropouts", summary.get("historical_dropouts", 0))
+                    with k3:
+                        st.metric("Unpaid Fees", summary.get("students_with_unpaid_fees", 0))
+                    with k4:
+                        st.metric("Absences", summary.get("students_chronically_absent", 0))
+                    
+                    schools = res_data.get("school_metrics", [])
+                    if schools:
+                        st.dataframe(pd.DataFrame(schools), use_container_width=True)
             except Exception as ex:
                 st.error(f"Error: {ex}")
 
     elif selected_option in ["💬 Counselling", "📋 Reports"]:
         st.markdown(f"<h2>{selected_option} Hub</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #64748b;'>Manage emergency tickets, counseling sessions, and compliance reports.</p>", unsafe_allow_html=True)
+        
         target_id = st.text_input("Enter Student ID for Action", placeholder="e.g., RJ-JP-2026-890")
         if st.button("🚨 Dispatch Emergency Intervention Ticket"):
             if target_id:
