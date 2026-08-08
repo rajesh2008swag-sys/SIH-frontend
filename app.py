@@ -429,7 +429,7 @@ else:
             st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 2. STUDENTS REPOSITORY VIEW (Updated with Individual Vertical Profile View)
+    # 2. STUDENTS REPOSITORY VIEW (Clean Normal Text Rendering)
     # =========================================================================
     elif selected_option == "Students":
         st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository & Profile Inspection</h2>", unsafe_allow_html=True)
@@ -443,11 +443,9 @@ else:
                 if records:
                     df_students = pd.DataFrame(records)
                     
-                    # Create a selection interface for individual profiles
                     st.markdown('<div class="studio-card">', unsafe_allow_html=True)
                     st.markdown("<h4 style='color: #0f172a !important;'>Select Student for Vertical Profile Inspection</h4>", unsafe_allow_html=True)
                     
-                    # Build a dictionary map of Name -> Full Record
                     student_options = {f"{row['Name']} ({row['Student_ID']})": row for idx, row in df_students.iterrows()}
                     selected_key = st.selectbox("Choose a student from the active database:", options=list(student_options.keys()))
                     
@@ -456,35 +454,33 @@ else:
                         st.markdown("<br>", unsafe_allow_html=True)
                         st.markdown(f"### Profile Dossier: {chosen_student.get('Name')} [ID: {chosen_student.get('Student_ID')}]")
                         
-                        # Render individual details vertically using clean key-value layout
                         col_v1, col_v2 = st.columns(2, gap="large")
                         with col_v1:
                             st.markdown("##### Administrative & Demographics")
-                            st.markdown(f"- **Student ID:** `{chosen_student.get('Student_ID')}`")
-                            st.markdown(f"- **Full Name:** `{chosen_student.get('Name')}`")
-                            st.markdown(f"- **Institution:** `{chosen_student.get('School')}`")
-                            st.markdown(f"- **Gender:** `{chosen_student.get('Gender')}`")
-                            st.markdown(f"- **Cast Category:** `{chosen_student.get('Cast')}`")
-                            st.markdown(f"- **Religion:** `{chosen_student.get('Religion')}`")
-                            st.markdown(f"- **Age:** `{chosen_student.get('Age')}`")
-                            st.markdown(f"- **Area / Address:** `{chosen_student.get('Address')}`")
-                            st.markdown(f"- **Fees Status:** `{chosen_student.get('Fees_Paid_Status')}`")
+                            st.markdown(f"- **Student ID:** {chosen_student.get('Student_ID')}")
+                            st.markdown(f"- **Full Name:** {chosen_student.get('Name')}")
+                            st.markdown(f"- **Institution:** {chosen_student.get('School')}")
+                            st.markdown(f"- **Gender:** {chosen_student.get('Gender')}")
+                            st.markdown(f"- **Cast Category:** {chosen_student.get('Cast')}")
+                            st.markdown(f"- **Religion:** {chosen_student.get('Religion')}")
+                            st.markdown(f"- **Age:** {chosen_student.get('Age')}")
+                            st.markdown(f"- **Area / Address:** {chosen_student.get('Address')}")
+                            st.markdown(f"- **Fees Status:** {chosen_student.get('Fees_Paid_Status')}")
 
                         with col_v2:
                             st.markdown("##### Environmental & Academic Metrics")
-                            st.markdown(f"- **Family Size:** `{chosen_student.get('Family_Size')}`")
-                            st.markdown(f"- **Parental Status:** `{chosen_student.get('Parental_Status')}`")
-                            st.markdown(f"- **Mother Education / Job:** `{chosen_student.get('Mother_Education')} / {chosen_student.get('Mother_Job')}`")
-                            st.markdown(f"- **Father Education / Job:** `{chosen_student.get('Father_Education')} / {chosen_student.get('Father_Job')}`")
-                            st.markdown(f"- **Absence Days:** `{chosen_student.get('Number_of_Absences')}`")
-                            st.markdown(f"- **Past Failures:** `{chosen_student.get('Number_of_Failures')}`")
-                            st.markdown(f"- **Final Grade:** `{chosen_student.get('Final_Grade')}`")
-                            st.markdown(f"- **Internet Access:** `{chosen_student.get('Internet_Access')}`")
-                            st.markdown(f"- **Dropped Out Flag:** `{chosen_student.get('Dropped_Out')}`")
+                            st.markdown(f"- **Family Size:** {chosen_student.get('Family_Size')}")
+                            st.markdown(f"- **Parental Status:** {chosen_student.get('Parental_Status')}")
+                            st.markdown(f"- **Mother Education / Job:** {chosen_student.get('Mother_Education')} / {chosen_student.get('Mother_Job')}")
+                            st.markdown(f"- **Father Education / Job:** {chosen_student.get('Father_Education')} / {chosen_student.get('Father_Job')}")
+                            st.markdown(f"- **Absence Days:** {chosen_student.get('Number_of_Absences')}")
+                            st.markdown(f"- **Past Failures:** {chosen_student.get('Number_of_Failures')}")
+                            st.markdown(f"- **Final Grade:** {chosen_student.get('Final_Grade')}")
+                            st.markdown(f"- **Internet Access:** {chosen_student.get('Internet_Access')}")
+                            st.markdown(f"- **Dropped Out Flag:** {chosen_student.get('Dropped_Out')}")
                     
                     st.markdown('</div>', unsafe_allow_html=True)
                     
-                    # Also keep master database table view below for complete visibility
                     st.markdown("<br>", unsafe_allow_html=True)
                     st.markdown("#### Complete Database Table")
                     st.dataframe(df_students, use_container_width=True)
