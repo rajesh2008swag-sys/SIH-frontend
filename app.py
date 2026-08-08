@@ -4,7 +4,7 @@ import requests
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="RAJ-AEGIS | Dropout Prediction",
+    page_title="EDU SHIELD | Dropout Prediction",
     page_icon="▪️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -184,7 +184,7 @@ if st.session_state.app_state == 'landing':
                 Government of Rajasthan | Smart India Hackathon Initiative
             </div>
             <div class="landing-title">
-                RAJ-AEGIS <span style="color: #64748b; font-weight: 400;">// Dropout Prediction</span>
+                EDU SHIELD <span style="color: #64748b; font-weight: 400;">// Dropout Prediction</span>
             </div>
             <div class="landing-subtitle">
                 An advanced institutional early warning and predictive machine learning platform designed to proactively track student retention, compute vulnerability indexes, and coordinate administrative counseling across the State of Rajasthan.
@@ -383,7 +383,6 @@ else:
                         risk_score = res_data.get("risk_score", 0.0)
                         tier = res_data.get("risk_tier", "Low Risk")
                         
-                        # Save result data in session state so the SMS button outside the form can access it
                         st.session_state.last_risk_data = {
                             "student_id": student_id,
                             "tier": tier,
@@ -410,7 +409,6 @@ else:
                 except Exception as ex:
                     st.error(f"Connection failure: {ex}")
 
-        # Render SMS trigger button dynamically outside the form if the last result was High Risk
         if 'last_risk_data' in st.session_state and "High" in str(st.session_state.last_risk_data.get("tier", "")):
             st.markdown("<br>", unsafe_allow_html=True)
             st.markdown('<div class="studio-card">', unsafe_allow_html=True)
@@ -431,28 +429,71 @@ else:
             st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 2. STUDENTS REPOSITORY VIEW
+    # 2. STUDENTS REPOSITORY VIEW (Updated with Individual Vertical Profile View)
     # =========================================================================
     elif selected_option == "Students":
-        st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository</h2>", unsafe_allow_html=True)
-        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-        if st.button("SYNC DATABASE RECORDS"):
-            try:
-                with st.spinner("Querying repository via API..."):
-                    resp = requests.get(f"{API_BASE_URL}/api/students", timeout=15)
-                if resp.status_code == 200:
-                    records = resp.json()
-                    if records:
-                        df_students = pd.DataFrame(records)
-                        st.success(f"Loaded {len(df_students)} records.")
-                        st.dataframe(df_students, use_container_width=True)
-                    else:
-                        st.info("Repository empty.")
+        st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository & Profile Inspection</h2>", unsafe_allow_html=True)
+        
+        try:
+            with st.spinner("Synchronizing repository records..."):
+                resp = requests.get(f"{API_BASE_URL}/api/students", timeout=15)
+            
+            if resp.status_code == 200:
+                records = resp.json()
+                if records:
+                    df_students = pd.DataFrame(records)
+                    
+                    # Create a selection interface for individual profiles
+                    st.markdown('<div class="studio-card">', unsafe_allow_html=True)
+                    st.markdown("<h4 style='color: #0f172a !important;'>Select Student for Vertical Profile Inspection</h4>", unsafe_allow_html=True)
+                    
+                    # Build a dictionary map of Name -> Full Record
+                    student_options = {f"{row['Name']} ({row['Student_ID']})": row for idx, row in df_students.iterrows()}
+                    selected_key = st.selectbox("Choose a student from the active database:", options=list(student_options.keys()))
+                    
+                    if selected_key:
+                        chosen_student = student_options[selected_key]
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        st.markdown(f"### Profile Dossier: {chosen_student.get('Name')} [ID: {chosen_student.get('Student_ID')}]")
+                        
+                        # Render individual details vertically using clean key-value layout
+                        col_v1, col_v2 = st.columns(2, gap="large")
+                        with col_v1:
+                            st.markdown("##### Administrative & Demographics")
+                            st.markdown(f"- **Student ID:** `{chosen_student.get('Student_ID')}`")
+                            st.markdown(f"- **Full Name:** `{chosen_student.get('Name')}`")
+                            st.markdown(f"- **Institution:** `{chosen_student.get('School')}`")
+                            st.markdown(f"- **Gender:** `{chosen_student.get('Gender')}`")
+                            st.markdown(f"- **Cast Category:** `{chosen_student.get('Cast')}`")
+                            st.markdown(f"- **Religion:** `{chosen_student.get('Religion')}`")
+                            st.markdown(f"- **Age:** `{chosen_student.get('Age')}`")
+                            st.markdown(f"- **Area / Address:** `{chosen_student.get('Address')}`")
+                            st.markdown(f"- **Fees Status:** `{chosen_student.get('Fees_Paid_Status')}`")
+
+                        with col_v2:
+                            st.markdown("##### Environmental & Academic Metrics")
+                            st.markdown(f"- **Family Size:** `{chosen_student.get('Family_Size')}`")
+                            st.markdown(f"- **Parental Status:** `{chosen_student.get('Parental_Status')}`")
+                            st.markdown(f"- **Mother Education / Job:** `{chosen_student.get('Mother_Education')} / {chosen_student.get('Mother_Job')}`")
+                            st.markdown(f"- **Father Education / Job:** `{chosen_student.get('Father_Education')} / {chosen_student.get('Father_Job')}`")
+                            st.markdown(f"- **Absence Days:** `{chosen_student.get('Number_of_Absences')}`")
+                            st.markdown(f"- **Past Failures:** `{chosen_student.get('Number_of_Failures')}`")
+                            st.markdown(f"- **Final Grade:** `{chosen_student.get('Final_Grade')}`")
+                            st.markdown(f"- **Internet Access:** `{chosen_student.get('Internet_Access')}`")
+                            st.markdown(f"- **Dropped Out Flag:** `{chosen_student.get('Dropped_Out')}`")
+                    
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    # Also keep master database table view below for complete visibility
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    st.markdown("#### Complete Database Table")
+                    st.dataframe(df_students, use_container_width=True)
                 else:
-                    st.error("API Query failed.")
-            except Exception as e:
-                st.error(f"Error: {e}")
-        st.markdown('</div>', unsafe_allow_html=True)
+                    st.info("Repository empty.")
+            else:
+                st.error("API Query failed to load student records.")
+        except Exception as e:
+            st.error(f"Error connecting to server: {e}")
 
     # =========================================================================
     # 3. ANALYTICS VIEW
