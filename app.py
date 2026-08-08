@@ -238,7 +238,7 @@ if st.session_state.app_state == 'landing':
                 <li><b>JASHWANTH (FRONTEND)</b> — RA2511026020355</li>
                 <li><b>TARUNIKA (PPT)</b> — RA251102602068</li>
                 <li><b>GAUTHAM (PPT)</b> — RA2511026020341</li>
-                <li><b>VEDHANTHA (PROTOTYPE)</b> — RA2511026020366</li>
+                <li><b>VEDHANTHAN </b> — RA2511026020366</li>
             </ul>
         </div>
     """, unsafe_allow_html=True)
