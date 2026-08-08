@@ -16,7 +16,7 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Complete Theme Styling
+# 2. Complete Theme Styling (Forced Light Background for Inputs & Selectboxes)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -118,15 +118,23 @@ st.markdown("""
         color: #0f172a !important;
     }
 
-    /* Force Streamlit Input Fields */
-    .stTextInput input, .stNumberInput input, div[data-baseweb="select"] {
-        background-color: #f8fafc !important;
+    /* Force Streamlit Input Fields and Selectboxes to be Crisp White with Dark Text */
+    .stTextInput input, .stNumberInput input {
+        background-color: #ffffff !important;
         color: #0f172a !important;
         border: 1px solid #cbd5e1 !important;
         -webkit-text-fill-color: #0f172a !important;
     }
+    
+    /* Force BaseWeb Select dropdowns to be clean white */
+    div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+    }
     div[data-baseweb="select"] * {
         color: #0f172a !important;
+        background-color: transparent !important;
     }
 
     /* Force ALL Streamlit Buttons to be Bright Blue with Crisp White Text */
@@ -227,7 +235,7 @@ if st.session_state.app_state == 'landing':
                 <li><b>JASHWANTH (FRONTEND)</b> — RA2511026020355</li>
                 <li><b>TARUNIKA (PPT)</b> — RA251102602068</li>
                 <li><b>GAUTHAM (PPT)</b> — RA2511026020341</li>
-                <li><b>VEDHANTH </b> — RA2511026020366</li>
+                <li><b>VEDHANTHA (PROTOTYPE)</b> — RA2511026020366</li>
             </ul>
         </div>
     """, unsafe_allow_html=True)
@@ -429,7 +437,7 @@ else:
             st.markdown('</div>', unsafe_allow_html=True)
 
     # =========================================================================
-    # 2. STUDENTS REPOSITORY VIEW (Clean Normal Text Rendering)
+    # 2. STUDENTS REPOSITORY VIEW
     # =========================================================================
     elif selected_option == "Students":
         st.markdown("<h2 style='color: #0f172a !important;'>Master Student Repository & Profile Inspection</h2>", unsafe_allow_html=True)
