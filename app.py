@@ -16,7 +16,7 @@ API_BASE_URL = "https://sih-student-api.onrender.com"
 if 'app_state' not in st.session_state:
     st.session_state.app_state = 'landing'  # 'landing' or 'dashboard'
 
-# 2. Complete Theme Styling (Forced Light Background for Inputs & Selectboxes)
+# 2. Complete Theme Styling (Targeting BaseWeb Select Elements explicitly to force white background)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -126,15 +126,18 @@ st.markdown("""
         -webkit-text-fill-color: #0f172a !important;
     }
     
-    /* Force BaseWeb Select dropdowns to be clean white */
-    div[data-baseweb="select"] > div {
+    /* Aggressively Override BaseWeb Select Styling to Force Solid White Background */
+    div[data-baseweb="select"], 
+    div[data-baseweb="select"] > div, 
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] div {
         background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
         color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
-    div[data-baseweb="select"] * {
-        color: #0f172a !important;
-        background-color: transparent !important;
+    div[data-baseweb="select"] {
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
     }
 
     /* Force ALL Streamlit Buttons to be Bright Blue with Crisp White Text */
